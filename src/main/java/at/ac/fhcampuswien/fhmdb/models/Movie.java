@@ -7,7 +7,6 @@ public class Movie {
     private String title;
     private String description;
     private List<Genre> genres;
-    // TODO add more properties here
 
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
@@ -23,31 +22,43 @@ public class Movie {
         return description;
     }
 
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
     public static List<Movie> initializeMovies(){
         return List.of(
                 new Movie(
+                        "Wall-E",
+                        "A trash compactor robot goes to space because of a plant. " +
+                                "Gives space humans hope for a feature on earth and makes them resettle on a " +
+                                "desolate wasteland of a world, where they inevitably " +
+                                "suffer and die.",
+                        List.of(Genre.ADVENTURE, Genre.ANIMATION, Genre.SCIENCE_FICTION, Genre.FAMILY)
+                ),
+                new Movie(
                         "Ironman",
-                        "Some texA movie about Ironman",
+                        "A billionaire who has to fully clad himself in iron to protect himself from the harsh reality he lives in.",
                         List.of(Genre.ACTION, Genre.SCIENCE_FICTION)
                 ),
                 new Movie(
                         "Spiderman",
-                        "Some text",
+                        "About a guy who is probably not disgusted by spiders.",
                         List.of(Genre.ACTION, Genre.SCIENCE_FICTION)
                 ),
                 new Movie(
                         "Schindlers-List",
-                        "A historical movie showing how jews suffer at WW2",
+                        "A historical movie showing an adventure capitalist failing to make money.",
                         List.of(Genre.DRAMA, Genre.DOCUMENTARY, Genre.HISTORY)
                 ),
                 new Movie(
-                        "Avangers",
-                        "Duds with powers and stuff",
+                        "Avengers",
+                        "Dudes with powers and stuff",
                         List.of(Genre.ACTION, Genre.FAMILY)
                 ),
                 new Movie(
-                        "Im Namen der Rose",
-                        "A historical classic",
+                        "The Name of the Rose",
+                        "Doubt is the enemy of faith.",
                         List.of(Genre.CRIME, Genre.HISTORY, Genre.MYSTERY)
                 )
         );

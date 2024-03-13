@@ -9,10 +9,14 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
-    private final VBox layout = new VBox(title, detail);
+    private final Label genre = new Label();
+    private final VBox layout = new VBox(title, detail, genre);
 
     @Override
     protected void updateItem(Movie movie, boolean empty) {
@@ -20,6 +24,11 @@ public class MovieCell extends ListCell<Movie> {
 
         if (empty || movie == null) {
             setText(null);
+
+            // Fixes the bug that even though the parent movie is
+            // removed from the list the MovieCell is kept and still shown.
+            // This makes it so the old MovieCell is at least invisible.
+            setGraphic(null);
         } else {
             this.getStyleClass().add("movie-cell");
             title.setText(movie.getTitle());
@@ -28,11 +37,16 @@ public class MovieCell extends ListCell<Movie> {
                             ? movie.getDescription()
                             : "No description available"
             );
+            String genreText = movie.getGenres().stream()
+                    .map(Objects::toString)
+                    .collect(Collectors.joining(", "));
+            genre.setText(genreText);
 
 
             // color scheme
             title.getStyleClass().add("text-yellow");
             detail.getStyleClass().add("text-white");
+            genre.getStyleClass().add("text-white");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
 
             // layout
