@@ -139,6 +139,29 @@ class MovieUtilsTest {
     }
 
     @Test
+    void testDescriptionAndTitelSearchNonFound() {
+        // Given
+        String searchText = "OMEGA";
+        Movie movie1 = new Movie("IronMan", "This is a movie.", List.of());
+        Movie movie2 = new Movie("Avangers", "This is a MAN.", List.of());
+        Movie movie3 = new Movie("Stranger Things", "eleven", List.of());
+        Movie movie4 = new Movie("Spiederman", "This was a stone.", List.of());
+        List<Movie> givenMovies = List.of(
+                movie1,
+                movie2,
+                movie3,
+                movie4
+        );
+        List<Movie> expectedMovies = List.of();
+
+        // When
+        List<Movie> actualMovies = MovieUtils.search(givenMovies, searchText);
+
+        // Then
+        assertEquals(expectedMovies, actualMovies);
+    }
+
+    @Test
     void testTitleSortAscending() {
         // Given
         Movie movie1 = new Movie("Ironman", "A", List.of());
