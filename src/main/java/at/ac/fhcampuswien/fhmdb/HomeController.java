@@ -65,7 +65,7 @@ public class HomeController implements Initializable {
     }
 
     private void onSortButtonClick(ActionEvent actionEvent) {
-        if (sortBtn.getText().equals("Sort (desc)")) {
+        if ("Sort (desc)".equals(sortBtn.getText())) {
             List<Movie> sortedMovies = MovieUtils.sort(observableMovies, SortOrder.DESCENDING);
             observableMovies.setAll(sortedMovies);
             sortBtn.setText("Sort (asc)");
