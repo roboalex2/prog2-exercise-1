@@ -62,12 +62,14 @@ public class MovieUtils {
                 .toList();
     }
 
+    // Filter for movies containing the specified genre
     public static List<Movie> filter(List<Movie> movies, Genre filterGenre) {
         return movies.stream()
                 .filter(movie -> movie.getGenres().contains(filterGenre))
                 .toList();
     }
 
+    // Sorts given movies by the title
     public static List<Movie> sort(List<Movie> movies, SortOrder sortOrder) {
         if (SortOrder.ASCENDING.equals(sortOrder)) {
             return movies.stream()
