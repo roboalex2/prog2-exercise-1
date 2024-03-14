@@ -112,7 +112,7 @@ class MovieUtilsTest {
     }
 
     @Test
-    void testDescriptionAndTitelSearch() {
+    void testDescriptionAndTitleSearch() {
         // Given
         String searchText = "man";
         Movie movie1 = new Movie("IronMan", "This is a movie.", List.of());
