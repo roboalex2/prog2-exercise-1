@@ -1,29 +1,60 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Movie {
+    private UUID id;
     private String title;
     private String description;
     private List<Genre> genres;
 
-    public Movie(String title, String description, List<Genre> genres) {
+    public Movie(UUID id, String title, String description, List<Genre> genres) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.genres = genres;
+    }
+
+    public Movie(String title, String description, List<Genre> genres) {
+        this.id = UUID.randomUUID();
+        this.title = title;
+        this.description = description;
+        this.genres = genres;
+    }
+
+    public Movie() {
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<Genre> getGenres() {
         return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     @Override

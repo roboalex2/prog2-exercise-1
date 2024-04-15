@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb.util;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortOrder;
+import at.ac.fhcampuswien.fhmdb.util.MovieUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

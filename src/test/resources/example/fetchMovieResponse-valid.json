@@ -1,0 +1,56 @@
+[
+  {
+    "id": "a47afd8a-b768-4a34-8ed6-bf5d90c0feeb",
+    "title": "The Lord of the Rings: The Return of the King",
+    "genres": [
+      "ADVENTURE",
+      "DRAMA",
+      "FANTASY"
+    ],
+    "releaseYear": 2003,
+    "description": "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+    "imgUrl": "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX1000_.jpg",
+    "lengthInMinutes": 201,
+    "directors": [
+      "Peter Jackson"
+    ],
+    "writers": [
+      "J.R.R. Tolkien",
+      "Fran Walsh",
+      "Philippa Boyens"
+    ],
+    "mainCast": [
+      "Elijah Wood",
+      "Ian McKellen",
+      "Viggo Mortensen"
+    ],
+    "rating": 8.9
+  },
+  {
+    "id": "e109ec5f-c3af-472d-93e5-9c4c0d04d640",
+    "title": "The Lord of the Rings: The Two Towers",
+    "genres": [
+      "ADVENTURE",
+      "DRAMA",
+      "FANTASY"
+    ],
+    "releaseYear": 2002,
+    "description": "While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron\"s new ally, Saruman, and his hordes of Isengard.",
+    "imgUrl": "https://m.media-amazon.com/images/M/MV5BZTUxNzg3MDUtYjdmZi00ZDY1LTkyYTgtODlmOGY5N2RjYWUyXkEyXkFqcGdeQXVyMTA0MTM5NjI2._V1_FMjpg_UX1000_.jpg",
+    "lengthInMinutes": 179,
+    "directors": [
+      "Peter Jackson"
+    ],
+    "writers": [
+      "J.R.R. Tolkien",
+      "Fran Walsh",
+      "Philippa Boyens"
+    ],
+    "mainCast": [
+      "Elijah Wood",
+      "Ian McKellen",
+      "Viggo Mortensen"
+    ],
+    "rating": 8.7
+  }
+]
