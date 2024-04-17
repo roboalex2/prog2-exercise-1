@@ -1,13 +1,10 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.models.Genre;
-import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.SortOrder;
+import at.ac.fhcampuswien.fhmdb.api.MovieApi;
+import at.ac.fhcampuswien.fhmdb.models.*;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.util.MovieUtils;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,11 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class HomeController implements Initializable {
     private static final String NO_GENRE_TEXT = "No Genre Filter";
@@ -41,10 +37,17 @@ public class HomeController implements Initializable {
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
-    private final List<Movie> allMovies = MovieUtils.initializeMovies();
+    private List<Movie> allMovies;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        try {
+            allMovies = new MovieApi().fetchMovies(new MovieRequestParameter());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
         observableMovies.addAll(allMovies);         // add dummy data to observable list
 
         // initialize UI stuff
@@ -54,9 +57,9 @@ public class HomeController implements Initializable {
         genreComboBox.setValue(NO_GENRE_TEXT);
         ObservableList<String> genres = FXCollections.observableArrayList(NO_GENRE_TEXT);
         genres.addAll(
-                Arrays.stream(Genre.values())
-                        .map(Objects::toString)
-                        .toList()
+            Arrays.stream(Genre.values())
+                .map(Objects::toString)
+                .toList()
         );
         genreComboBox.setItems(genres);
 

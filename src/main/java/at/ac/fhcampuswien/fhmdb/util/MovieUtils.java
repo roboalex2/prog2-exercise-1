@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.util;
 
-import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.SortOrder;
+import at.ac.fhcampuswien.fhmdb.models.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class MovieUtils {
     }
 
     // Filter for movies containing the specified genre
-    public static List<Movie> filter(List<Movie> movies, String filterGenre) {
+    public static List<Movie> filter(List<Movie> movies, Genre filterGenre) {
         return movies.stream()
                 .filter(movie -> movie.getGenres().contains(filterGenre))
                 .toList();
