@@ -6,6 +6,7 @@ import at.ac.fhcampuswien.fhmdb.models.SortOrder;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MovieUtils {
 
@@ -49,10 +50,11 @@ public class MovieUtils {
     oeftesten im mainCast der übergebenen Filme vorkommt.
      */
     public static String getMostPopularActor(List<Movie> movies) {
-        Map<String, Integer> actorCount = new HashMap<>();
-
-        actorCount = movies.stream()
-                .flatMap(movie -> movie.getMainCast().stream())
+        Map<String, Integer> actorCount = movies.stream()
+                .flatMap(movie -> Optional.ofNullable(movie.getMainCast()) // Handle actors list being null
+                        .map(Collection::stream) // Turn actor list to stream
+                        .map(Stream::distinct) // Filter duplicate actors
+                        .orElse(Stream.of())) // Flatmap empty stream in case no actor list given
                 .collect(Collectors.toMap(
                         actor -> actor,
                         actor -> 1,
