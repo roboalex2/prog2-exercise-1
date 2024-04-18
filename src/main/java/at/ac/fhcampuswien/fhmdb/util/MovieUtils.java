@@ -47,10 +47,9 @@ public class MovieUtils {
         }
     }
 
-    //TODO: String getMostPopularActor(List<Movie> movies)
     /*
-    String getMostPopularActor(List<Movie> movies): gibt jene Person zurück, die am
-    öftesten im mainCast der übergebenen Filme vorkommt.
+    String getMostPopularActor(List<Movie> movies): gibt jene Person zurueck, die am
+    oeftesten im mainCast der übergebenen Filme vorkommt.
      */
     public static String getMostPopularActor(List<Movie> movies) {
         Map<String, Integer> actorCount = new HashMap<>();
@@ -76,8 +75,9 @@ public class MovieUtils {
     übergebenen Filme und gibt die Anzahl der Buchstaben des Titels zurück
      */
     public static int getLongestMovieTitle(List<Movie> movies) {
-        Map<String, Integer> titleMap = new HashMap<>();
-        movies.stream().map(Movie::getTitle).forEach(title -> titleMap.put(title, title.length()));
+        Map<String, Integer> titleMap = movies.stream()
+                .map(Movie::getTitle)
+                .collect(Collectors.toMap(title -> title, String::length));
 
         final int longestTitle = titleMap.values().stream()
                 .max(Comparator.comparingInt(Integer::intValue))
