@@ -13,7 +13,6 @@ public class MovieUtilsBetweenYearsTest {
     private static final UUID MOVIE1_ID = UUID.randomUUID();
     private static final UUID MOVIE2_ID = UUID.randomUUID();
     private static final UUID MOVIE3_ID = UUID.randomUUID();
-    private static final UUID MOVIE4_ID = UUID.randomUUID();
 
     @Test
     void testFilterForMoviesBetweenYears_shouldFilterOutMoviesBeforeStartYear() {
