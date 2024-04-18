@@ -1,32 +1,31 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieApi;
-import at.ac.fhcampuswien.fhmdb.models.*;
+import at.ac.fhcampuswien.fhmdb.models.Genre;
+import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.models.MovieRequestParameter;
+import at.ac.fhcampuswien.fhmdb.models.SortOrder;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
-import at.ac.fhcampuswien.fhmdb.api.MovieApi;
 import at.ac.fhcampuswien.fhmdb.util.MovieUtils;
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.URL;
-import java.util.*;
-
-
+import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import javafx.util.StringConverter;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.stream.IntStream;
-import java.net.URL;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 public class HomeController implements Initializable {
@@ -48,27 +47,19 @@ public class HomeController implements Initializable {
     public JFXButton sortBtn;
 
     @FXML
-    public  JFXComboBox releaseComboBox;
+    public JFXComboBox releaseComboBox;
 
     @FXML
     public TextField ratingField;
 
+    private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
-
-    private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
-
-    private List<Movie> allMovies;
+    private MovieApi movieApi = new MovieApi();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        try {
-            allMovies = new MovieApi().fetchMovies(new MovieRequestParameter());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-
-        observableMovies.addAll(allMovies);         // add dummy data to observable list
+        observableMovies.addAll(fetchMovies(new MovieRequestParameter()));
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -77,9 +68,9 @@ public class HomeController implements Initializable {
         genreComboBox.setValue(NO_GENRE_TEXT);
         ObservableList<String> genres = FXCollections.observableArrayList(NO_GENRE_TEXT);
         genres.addAll(
-            Arrays.stream(Genre.values())
-                .map(Objects::toString)
-                .toList()
+                Arrays.stream(Genre.values())
+                        .map(Objects::toString)
+                        .toList()
         );
         genreComboBox.setItems(genres);
 
@@ -88,13 +79,14 @@ public class HomeController implements Initializable {
 
 
         releaseComboBox.getItems().add("No Filter");
-        IntStream.iterate(2025, year -> year - 1)
-                .limit(2025 - 1900 + 1)
+        IntStream.iterate(OffsetDateTime.now().getYear(), year -> year - 1)
+                .limit(200)
                 .boxed()
                 .forEach(releaseComboBox.getItems()::add);
         releaseComboBox.getSelectionModel().select("No Filter");
 
-        String RegexInputValidationRating = "^(10\\.0|[1-9](\\.\\d?)?)$";        ratingField.textProperty().addListener((observable, oldvalue, newvalue) -> {
+        String RegexInputValidationRating = "^(10\\.0|[0-9](\\.\\d?)?)$";
+        ratingField.textProperty().addListener((observable, oldvalue, newvalue) -> {
             if (!newvalue.matches(RegexInputValidationRating) && !newvalue.isEmpty()) {
                 ratingField.setText(oldvalue);
             }
@@ -114,37 +106,76 @@ public class HomeController implements Initializable {
     }
 
     public void onSearchButtonClick(ActionEvent actionEvent) {
-        List<Movie> searchResult = MovieUtils.search(allMovies, searchField.getText());
-        if (!NO_GENRE_TEXT.equals(genreComboBox.getValue())) {
-            searchResult = MovieUtils.filter(searchResult, Genre.valueOf(genreComboBox.getValue()));
+        Double searchRating = getSearchRating();
+        String searchQuery = getSearchQuery();
+        Genre searchGenre = getSearchGenre();
+        Integer searchReleaseDate = getSearchReleaseDate();
+
+        MovieRequestParameter params = new MovieRequestParameter(searchQuery, searchGenre, searchReleaseDate, searchRating);
+        List<Movie> searchResult = fetchMovies(params);
+
+        // Keep exercise one logic working
+        if (searchQuery != null) {
+            searchResult = MovieUtils.search(searchResult, searchField.getText());
         }
 
-        String movieTitle = searchField.getText();
-        Double rating = !ratingField.getText().isEmpty() ? Double.parseDouble(ratingField.getText()) : null;
-        Genre genre = (!NO_GENRE_TEXT.equals(genreComboBox.getValue()) && genreComboBox.getValue() != null) ? Genre.valueOf(genreComboBox.getValue()) : null;
-
-        // Handling the release year parsing
-        Integer release = null;
-        if (releaseComboBox.getValue() != null && !releaseComboBox.getValue().equals("No Filter")) {
-            try {
-                release = Integer.parseInt((String) releaseComboBox.getValue());
-            } catch (NumberFormatException e) {
-                // Log the error, show an alert, or handle the incorrect format
-                System.err.println("Invalid year format: " + e.getMessage());
-            }
+        if (searchGenre != null) {
+            searchResult = MovieUtils.filter(searchResult, searchGenre);
         }
 
-        List<Movie> fetchedData = null;
+        if (sortBtn.getText() != null && sortBtn.getText().contains("des")) {
+            searchResult = MovieUtils.sort(searchResult, SortOrder.DESCENDING);
+        } else {
+            searchResult = MovieUtils.sort(searchResult, SortOrder.ASCENDING);
+        }
+
+        observableMovies.setAll(searchResult);
+    }
+
+    private List<Movie> fetchMovies(MovieRequestParameter movieRequestParameter) {
         try {
-            MovieRequestParameter params = new MovieRequestParameter(movieTitle, genre, release, rating);
-            fetchedData = new MovieApi().fetchMovies(params);
-        } catch (Exception e) {
-            System.err.println("An error occurred while fetching movies: " + e.getMessage());
-        }
-
-        if (fetchedData != null) {
-            observableMovies.setAll(fetchedData);
+            return movieApi.fetchMovies(movieRequestParameter);
+        } catch (IOException exception) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Failed to load movie Data!");
+            alert.setContentText("The application failed to retrieve data from the server. Check your network connection. Details: " + exception.getMessage());
+            alert.show();
+            return List.of();
         }
     }
 
+    private Double getSearchRating() {
+        if (ratingField.getText() == null || ratingField.getText().isBlank()) {
+            return null;
+        }
+
+        return Double.parseDouble(ratingField.getText().strip());
+    }
+
+    private String getSearchQuery() {
+        if (searchField.getText() == null || searchField.getText().isBlank()) {
+            return null;
+        }
+
+        return searchField.getText().strip();
+    }
+
+    private Genre getSearchGenre() {
+        if (NO_GENRE_TEXT.equals(genreComboBox.getValue())) {
+            return null;
+        }
+
+        return Genre.valueOf(genreComboBox.getValue());
+    }
+
+    private Integer getSearchReleaseDate() {
+        if (releaseComboBox.getValue() != null) {
+            try {
+                return Integer.parseInt(releaseComboBox.getValue().toString());
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
+    }
 }
