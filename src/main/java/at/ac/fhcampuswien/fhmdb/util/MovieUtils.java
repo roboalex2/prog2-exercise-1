@@ -47,7 +47,7 @@ public class MovieUtils {
 
     /*
     String getMostPopularActor(List<Movie> movies): gibt jene Person zurueck, die am
-    oeftesten im mainCast der übergebenen Filme vorkommt.
+    oeftesten im mainCast der übergebenen Filme vorkommt. Wenn nicht gefunden gibt null zurueck
      */
     public static String getMostPopularActor(List<Movie> movies) {
         Map<String, Integer> actorCount = movies.stream()
@@ -64,7 +64,7 @@ public class MovieUtils {
         final String mostPopularActor = actorCount.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
-                .orElse("No actors found");
+                .orElse(null);
 
         return mostPopularActor;
     }
