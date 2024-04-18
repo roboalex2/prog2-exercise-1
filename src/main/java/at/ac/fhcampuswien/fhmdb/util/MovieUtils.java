@@ -1,8 +1,13 @@
 package at.ac.fhcampuswien.fhmdb.util;
 
-import at.ac.fhcampuswien.fhmdb.models.*;
+import at.ac.fhcampuswien.fhmdb.models.Genre;
+import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.models.SortOrder;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MovieUtils {
@@ -47,7 +52,7 @@ public class MovieUtils {
     String getMostPopularActor(List<Movie> movies): gibt jene Person zurück, die am
     öftesten im mainCast der übergebenen Filme vorkommt.
      */
-    static public String getMostPopularActor(List<Movie> movies) {
+    public static String getMostPopularActor(List<Movie> movies) {
         Map<String, Integer> actorCount = new HashMap<>();
 
         actorCount = movies.stream()
@@ -70,7 +75,7 @@ public class MovieUtils {
     int getLongestMovieTitle(List<Movie> movies): filtert auf den längsten Titel der
     übergebenen Filme und gibt die Anzahl der Buchstaben des Titels zurück
      */
-    static public int getLongestMovieTitle(List<Movie> movies){
+    public static int getLongestMovieTitle(List<Movie> movies) {
         Map<String, Integer> titleMap = new HashMap<>();
         movies.stream().map(Movie::getTitle).forEach(title -> titleMap.put(title, title.length()));
 
@@ -85,10 +90,10 @@ public class MovieUtils {
     long countMoviesFrom(List<Movie> movies, String director): gibt die Anzahl der
     Filme eines bestimmten Regisseurs zurück
      */
-    static public long countMoviesFromDirector(List<Movie> movies, String director){
+    public static long countMoviesFromDirector(List<Movie> movies, String director) {
         return movies.stream()
-                        .filter(movie -> movie.getDirectors().contains(director))
-                        .count();
+                .filter(movie -> movie.getDirectors().contains(director))
+                .count();
     }
 
     /*
@@ -96,9 +101,9 @@ public class MovieUtils {
     endYear): gibt jene Filme zurück, die zwischen zwei gegebenen Jahren veröffentlicht
     wurden.
      */
-    static public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear){
+    public static List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
         return movies.stream()
-            .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
-            .collect(Collectors.toList());
+                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
+                .collect(Collectors.toList());
     }
 }
