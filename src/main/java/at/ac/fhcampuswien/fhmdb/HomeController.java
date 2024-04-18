@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb;
 import at.ac.fhcampuswien.fhmdb.api.MovieApi;
 import at.ac.fhcampuswien.fhmdb.models.*;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.api.MovieApi;
 import at.ac.fhcampuswien.fhmdb.util.MovieUtils;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
@@ -16,6 +17,17 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.*;
+
+
+import java.util.List;
+import java.util.Set;
+import javafx.util.StringConverter;
+import java.util.stream.IntStream;
+import java.net.URL;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 
 public class HomeController implements Initializable {
     private static final String NO_GENRE_TEXT = "No Genre Filter";
@@ -34,6 +46,14 @@ public class HomeController implements Initializable {
 
     @FXML
     public JFXButton sortBtn;
+
+    @FXML
+    public  JFXComboBox releaseComboBox;
+
+    @FXML
+    public TextField ratingField;
+
+
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
@@ -65,6 +85,20 @@ public class HomeController implements Initializable {
 
         searchBtn.setOnAction(this::onSearchButtonClick);
         sortBtn.setOnAction(this::onSortButtonClick);
+
+
+        releaseComboBox.getItems().add("No Filter");
+        IntStream.iterate(2025, year -> year - 1)
+                .limit(2025 - 1900 + 1)
+                .boxed()
+                .forEach(releaseComboBox.getItems()::add);
+        releaseComboBox.getSelectionModel().select("No Filter");
+
+        String RegexInputValidationRating = "^(10\\.0|[1-9](\\.\\d?)?)$";        ratingField.textProperty().addListener((observable, oldvalue, newvalue) -> {
+            if (!newvalue.matches(RegexInputValidationRating) && !newvalue.isEmpty()) {
+                ratingField.setText(oldvalue);
+            }
+        });
     }
 
     private void onSortButtonClick(ActionEvent actionEvent) {
@@ -82,9 +116,35 @@ public class HomeController implements Initializable {
     public void onSearchButtonClick(ActionEvent actionEvent) {
         List<Movie> searchResult = MovieUtils.search(allMovies, searchField.getText());
         if (!NO_GENRE_TEXT.equals(genreComboBox.getValue())) {
-            searchResult = MovieUtils.filter(searchResult, Genre.valueOf(Genre.class, genreComboBox.getValue()));
+            searchResult = MovieUtils.filter(searchResult, Genre.valueOf(genreComboBox.getValue()));
         }
 
-        observableMovies.setAll(searchResult);
+        String movieTitle = searchField.getText();
+        Double rating = !ratingField.getText().isEmpty() ? Double.parseDouble(ratingField.getText()) : null;
+        Genre genre = (!NO_GENRE_TEXT.equals(genreComboBox.getValue()) && genreComboBox.getValue() != null) ? Genre.valueOf(genreComboBox.getValue()) : null;
+
+        // Handling the release year parsing
+        Integer release = null;
+        if (releaseComboBox.getValue() != null && !releaseComboBox.getValue().equals("No Filter")) {
+            try {
+                release = Integer.parseInt((String) releaseComboBox.getValue());
+            } catch (NumberFormatException e) {
+                // Log the error, show an alert, or handle the incorrect format
+                System.err.println("Invalid year format: " + e.getMessage());
+            }
+        }
+
+        List<Movie> fetchedData = null;
+        try {
+            MovieRequestParameter params = new MovieRequestParameter(movieTitle, genre, release, rating);
+            fetchedData = new MovieApi().fetchMovies(params);
+        } catch (Exception e) {
+            System.err.println("An error occurred while fetching movies: " + e.getMessage());
+        }
+
+        if (fetchedData != null) {
+            observableMovies.setAll(fetchedData);
+        }
     }
+
 }
