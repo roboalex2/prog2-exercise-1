@@ -4,10 +4,7 @@ import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortOrder;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MovieUtils {
@@ -77,6 +74,7 @@ public class MovieUtils {
     public static int getLongestMovieTitle(List<Movie> movies) {
         Map<String, Integer> titleMap = movies.stream()
                 .map(Movie::getTitle)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toMap(title -> title, String::length));
 
         final int longestTitle = titleMap.values().stream()
