@@ -124,9 +124,9 @@ public class HomeController implements Initializable {
         }
 
         if (sortBtn.getText() != null && sortBtn.getText().contains("des")) {
-            searchResult = MovieUtils.sort(searchResult, SortOrder.DESCENDING);
-        } else {
             searchResult = MovieUtils.sort(searchResult, SortOrder.ASCENDING);
+        } else {
+            searchResult = MovieUtils.sort(searchResult, SortOrder.DESCENDING);
         }
 
         observableMovies.setAll(searchResult);
