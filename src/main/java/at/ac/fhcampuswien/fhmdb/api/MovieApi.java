@@ -1,12 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
-import at.ac.fhcampuswien.fhmdb.exception.HttpStatusException;
+import at.ac.fhcampuswien.fhmdb.exception.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
 import at.ac.fhcampuswien.fhmdb.models.MovieRequestParameter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,6 +11,10 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 public class MovieApi {
 
@@ -45,7 +44,7 @@ public class MovieApi {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful() || response.body() == null) {
-                throw new HttpStatusException(response.code(), "Failed to fetchMovies, got: " + response);
+                throw new MovieApiException(response.code(), "Failed to fetchMovies, got: " + response);
             }
 
             return parseToMovies(response.body().string());
