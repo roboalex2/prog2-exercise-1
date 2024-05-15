@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.util.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.api.MovieApi;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -63,7 +64,7 @@ public class HomeController implements Initializable {
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // use custom cell factory to display data
 
         genreComboBox.setValue(NO_GENRE_TEXT);
         ObservableList<String> genres = FXCollections.observableArrayList(NO_GENRE_TEXT);
@@ -92,6 +93,12 @@ public class HomeController implements Initializable {
             }
         });
     }
+
+    private final ClickEventHandler<Movie> onAddToWatchlistClicked = (clickedItem) -> {
+        // Add code to add movie to watchlist here
+        System.out.println("Added to watchlist: " + clickedItem.getTitle());
+        // Example: WatchlistRepository.addMovie(clickedItem);
+    };
 
     private void onSortButtonClick(ActionEvent actionEvent) {
         if ("Sort (desc)".equals(sortBtn.getText())) {
@@ -177,5 +184,12 @@ public class HomeController implements Initializable {
             }
         }
         return null;
+    }
+
+    public void showHome(ActionEvent actionEvent) {
+    }
+
+    public void showWatchlist(ActionEvent actionEvent) {
+
     }
 }
