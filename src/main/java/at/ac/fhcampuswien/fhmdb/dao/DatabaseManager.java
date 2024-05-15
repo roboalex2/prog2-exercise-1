@@ -6,6 +6,9 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
 public class DatabaseManager {
+
+    //startpoint is setDbInstance(String url)
+
     private static DatabaseManager dbInstance;
     private static MovieRepository mrInstance;
     private static WatchlistRepository wrInstance;
@@ -34,6 +37,9 @@ public class DatabaseManager {
             }
         }
     }
+
+
+    //getter / setter
     public static synchronized void setDbInstance(String databaseUrl) {
         if (dbInstance == null)
             dbInstance = new DatabaseManager(databaseUrl);
