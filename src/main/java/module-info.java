@@ -6,7 +6,6 @@ module at.ac.fhcampuswien.fhmdb {
     requires com.fasterxml.jackson.databind;
     requires com.h2database;
     requires ormlite.jdbc;
-    requires ormlite.core;
 
     opens at.ac.fhcampuswien.fhmdb to javafx.fxml;
     exports at.ac.fhcampuswien.fhmdb.models;
