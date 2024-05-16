@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+import static at.ac.fhcampuswien.fhmdb.dao.DatabaseManager.setDbInstance;
+
 public class FhmdbApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -17,6 +19,9 @@ public class FhmdbApplication extends Application {
         stage.setTitle("FHMDb");
         stage.setScene(scene);
         stage.show();
+
+        //connection / creating db
+        //setDbInstance("jdbc:h2:~/test", "test", "test");
     }
 
     public static void main(String[] args) {

@@ -15,10 +15,10 @@ public class DatabaseManager {
 
     private ConnectionSource connectionSource;
 
-    private DatabaseManager(String databaseUrl) {
-        //String databaseUrl = "jdbc:h2:mem:./myDb";
+    private DatabaseManager(String databaseUrl, String username, String password) {
+        //String databaseUrl = "jdbc:h2:mem:myDb";
         try {
-            connectionSource = new JdbcConnectionSource(databaseUrl);
+            connectionSource = new JdbcConnectionSource(databaseUrl, username, password);
         } catch (Exception e) {
             throw new RuntimeException("Error initializing database connection!", e);
         }
@@ -40,9 +40,9 @@ public class DatabaseManager {
 
 
     //getter / setter
-    public static synchronized void setDbInstance(String databaseUrl) {
+    public static synchronized void setDbInstance(String databaseUrl, String username, String password) {
         if (dbInstance == null)
-            dbInstance = new DatabaseManager(databaseUrl);
+            dbInstance = new DatabaseManager(databaseUrl,username, password);
     }
 
     public static MovieRepository getMrInstance() {
