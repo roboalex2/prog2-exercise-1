@@ -24,15 +24,27 @@ public class MovieEntity {
     @DatabaseField
     private String description;
 
+    @DatabaseField
+    private String imgUrl;
+
+    @DatabaseField
+    private int lengthInMinutes;
+
+    @DatabaseField
+    private double rating;
+
     public MovieEntity() {
     }
 
-    public MovieEntity(UUID apiId, String title, int year, String genres, String description) {
+    public MovieEntity(UUID apiId, String title, int year, String genres, String description, String imgUrl, int lengthInMinutes, double rating) {
         this.apiId = apiId;
         this.title = title;
         this.year = year;
         this.genres = genres;
         this.description = description;
+        this.imgUrl = imgUrl;
+        this.lengthInMinutes = lengthInMinutes;
+        this.rating=rating;
     }
 
     public UUID getApiId() {
@@ -73,5 +85,29 @@ public class MovieEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgurl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public int getLengthInMinutes() {
+        return lengthInMinutes;
+    }
+
+    public void setLengthInMinutes(int lengthInMinutes) {
+        this.lengthInMinutes = lengthInMinutes;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }
