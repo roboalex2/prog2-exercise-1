@@ -1,14 +1,16 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.dao.*;
+import at.ac.fhcampuswien.fhmdb.dao.entity.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.dao.entity.WatchlistMovieEntity;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
-
-import static at.ac.fhcampuswien.fhmdb.dao.DatabaseManager.setDbInstance;
+import java.sql.SQLException;
+import java.util.*;
 
 public class FhmdbApplication extends Application {
     @Override
@@ -20,8 +22,33 @@ public class FhmdbApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        //connection / creating db
-        //setDbInstance("jdbc:h2:~/test", "test", "test");
+        DatabaseManager databaseInstance = DatabaseManager.getDatabaseInstance();
+        databaseInstance.createConnectionSource("roboalex2", "test");
+
+        try {
+            databaseInstance.createTables();
+            MovieRepository movieRepository = new MovieRepository();
+
+            UUID movieId = UUID.randomUUID();
+
+            movieRepository.addMovie(new MovieEntity(movieId, "Test Movie", 2010, "ACTION,HISTORY", "Test movie cool"));
+
+            List<MovieEntity> allMovies = movieRepository.getAllMovies();
+            assert !allMovies.isEmpty();
+
+            WatchlistRepository watchlistRepository = new WatchlistRepository();
+            watchlistRepository.addMoviesToWatchlist(new WatchlistMovieEntity(allMovies.get(0)));
+
+            assert !watchlistRepository.getAllWatchlistMovies().isEmpty();
+
+            movieRepository.deleteMovie(movieId);
+
+            allMovies = movieRepository.getAllMovies();
+            assert allMovies.isEmpty();
+
+        } catch (UnsupportedOperationException | SQLException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     public static void main(String[] args) {

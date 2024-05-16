@@ -7,46 +7,33 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 import java.util.UUID;
 
 public class DatabaseManager {
 
-    //startpoint is setDbInstance(String url)
-
     private static DatabaseManager databaseInstance;
-    private final String DATA_BASE_URL;
-    private String username;
-    private String password;
+    private static final String DATA_BASE_URL = "jdbc:h2:~/movie_db";
 
     private ConnectionSource connectionSource;
 
-    private DatabaseManager(String DATA_BASE_URL, String username, String password) {
-        //String databaseUrl = "jdbc:h2:mem:myDb";
-        this.DATA_BASE_URL = DATA_BASE_URL;
-        this.username = username;
-        this.password = password;
-
-        createConnectionSource();
+    private DatabaseManager() {
+        // Singleton
     }
 
-    public static synchronized void setDbInstance(String DATA_BASE_URL, String username, String password) {
-        if (databaseInstance == null)
-            databaseInstance = new DatabaseManager(DATA_BASE_URL, username, password);
-    }
+    public static synchronized DatabaseManager getDatabaseInstance() {
+        if (databaseInstance == null) {
+            databaseInstance = new DatabaseManager();
+        }
 
-    public static DatabaseManager getDatabaseInstance() {
-        if(databaseInstance == null)
-            throw new UnsupportedOperationException("The Instance has not been created yet.");
         return databaseInstance;
     }
 
-
-
-    private void createConnectionSource(){
+    public void createConnectionSource(String username, String password) {
         try {
-            connectionSource = new JdbcConnectionSource(this.DATA_BASE_URL, this.username, this.password);
+            connectionSource = new JdbcConnectionSource(DATA_BASE_URL, username, password);
         } catch (Exception e) {
             throw new RuntimeException("Error initializing database connection!", e);
         }
@@ -59,17 +46,36 @@ public class DatabaseManager {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            connectionSource = null;
         }
     }
+
     public ConnectionSource getConnectionSource() {
         return connectionSource;
     }
 
     public Dao<MovieEntity, UUID> getMovieRepositoryDao() throws SQLException {
+        if (connectionSource == null) {
+            throw new UnsupportedOperationException("ConnectionSource has not been created yet. Create with createConnectionSource(..)");
+        }
+
         return DaoManager.createDao(connectionSource, MovieEntity.class);
     }
 
-    public Dao<WatchlistMovieEntity, UUID> getWatchlistMovieEntity() throws SQLException {
+    public Dao<WatchlistMovieEntity, Long> getWatchlistMovieEntity() throws SQLException {
+        if (connectionSource == null) {
+            throw new UnsupportedOperationException("ConnectionSource has not been created yet. Create with createConnectionSource(..)");
+        }
+
         return DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
+    }
+
+    public void createTables() throws SQLException {
+        if (connectionSource == null) {
+            throw new UnsupportedOperationException("ConnectionSource has not been created yet. Create with createConnectionSource(..)");
+        }
+
+        TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
     }
 }
