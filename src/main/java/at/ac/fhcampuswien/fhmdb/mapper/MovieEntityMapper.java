@@ -5,7 +5,8 @@ import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import org.h2.util.StringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,7 +15,7 @@ public class MovieEntityMapper {
     public static List<MovieEntity> fromMovies(List<Movie> movies) {
         return movies.stream()
             .map(movie -> new MovieEntity(
-                movie.getId().toString(),
+                movie.getId(),
                 movie.getTitle(),
                 movie.getReleaseYear(),
                 genresToString(movie.getGenres()),
@@ -26,7 +27,7 @@ public class MovieEntityMapper {
     public static List<Movie> toMovies(List<MovieEntity> movies) {
         return movies.stream()
             .map(movie -> new Movie(
-                UUID.fromString(movie.getApiId()),
+                movie.getApiId(),
                 movie.getTitle(),
                 movie.getDescription(),
                 movie.getYear(),

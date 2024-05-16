@@ -1,14 +1,16 @@
 package at.ac.fhcampuswien.fhmdb.dao.entity;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.util.UUID;
+
 @DatabaseTable(tableName = "movies")
 public class MovieEntity {
-    @DatabaseField(id = true, generatedId = true)
-    private long id;
 
-    @DatabaseField(unique = true)
-    private String apiId;
+    @DatabaseField(id = true, dataType = DataType.UUID)
+    private UUID apiId;
 
     @DatabaseField
     private String title;
@@ -25,7 +27,7 @@ public class MovieEntity {
     public MovieEntity() {
     }
 
-    public MovieEntity(String apiId, String title, int year, String genres, String description) {
+    public MovieEntity(UUID apiId, String title, int year, String genres, String description) {
         this.apiId = apiId;
         this.title = title;
         this.year = year;
@@ -33,19 +35,11 @@ public class MovieEntity {
         this.description = description;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getApiId() {
+    public UUID getApiId() {
         return apiId;
     }
 
-    public void setApiId(String apiId) {
+    public void setApiId(UUID apiId) {
         this.apiId = apiId;
     }
 
