@@ -7,15 +7,19 @@ import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public class MovieRepository {
-    private Dao<MovieEntity, Integer> movieDao;
+    private Dao<MovieEntity, UUID> movieDao;
 
     public MovieRepository() {
         try {
+            // Holen der ConnectionSource von DatabaseManager, um eine Verbindung zur Datenbank herzustellen
             ConnectionSource connectionSource = DatabaseManager.getDbInstance().getConnectionSource();
+            // Erstellen eines DAO (Data Access Object) für MovieEntity
             this.movieDao = DaoManager.createDao(connectionSource, MovieEntity.class);
         } catch (SQLException e) {
+            // Wirft einer RuntimeException, wenn eine SQL-Fehler bei der Initialisierung auftritt
             throw new RuntimeException("Error initializing MovieRepository", e);
         }
     }
@@ -28,11 +32,11 @@ public class MovieRepository {
         movieDao.createOrUpdate(movie);
     }
 
-    public void deleteMovie(int apiId) throws SQLException {
+    public void deleteMovie(UUID apiId) throws SQLException {
         movieDao.deleteById(apiId);
     }
 
     public void deleteAllMovies() throws SQLException {
-        movieDao.delete(movieDao.queryForAll());
+        movieDao.deleteBuilder().delete();
     }
 }

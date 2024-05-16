@@ -7,10 +7,11 @@ import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public class WatchlistRepository {
     //fetch all Movie Entities
-    private Dao<WatchlistMovieEntity, Integer> watchlistDao;
+    private Dao<WatchlistMovieEntity, UUID> watchlistDao;
 
     public WatchlistRepository() {
         try {
@@ -29,11 +30,11 @@ public class WatchlistRepository {
         watchlistDao.createOrUpdate(watchlistMovie);
     }
 
-    public void deleteMovieFromWatchlist(int apiId) throws SQLException {
+    public void deleteMovieFromWatchlist(UUID apiId) throws SQLException {
         watchlistDao.deleteById(apiId);
     }
 
     public void deleteAllWatchlistMovies() throws SQLException {
-        watchlistDao.delete(watchlistDao.queryForAll());
+        watchlistDao.deleteBuilder().delete();
     }
 }
