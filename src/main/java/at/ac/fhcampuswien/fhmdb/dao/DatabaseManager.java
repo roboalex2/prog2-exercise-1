@@ -31,12 +31,16 @@ public class DatabaseManager {
         return databaseInstance;
     }
 
-    public void createConnectionSource(String username, String password) {
-        try {
-            connectionSource = new JdbcConnectionSource(DATA_BASE_URL, username, password);
-        } catch (Exception e) {
-            throw new RuntimeException("Error initializing database connection!", e);
+    public void createConnectionSource(String username, String password) throws SQLException {
+        createConnectionSource(DATA_BASE_URL, username, password);
+    }
+
+    public void createConnectionSource(String dbUrl, String username, String password) throws SQLException {
+        if (connectionSource != null) {
+            throw new UnsupportedOperationException("ConnectionSource has already been created. Close with closeConnectionSource()");
         }
+
+        connectionSource = new JdbcConnectionSource(dbUrl, username, password);
     }
 
     public void closeConnectionSource() {
