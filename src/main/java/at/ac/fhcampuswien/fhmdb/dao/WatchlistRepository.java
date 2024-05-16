@@ -15,8 +15,7 @@ public class WatchlistRepository {
 
     public WatchlistRepository() {
         try {
-            ConnectionSource connectionSource = DatabaseManager.getDbInstance().getConnectionSource();
-            this.watchlistDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
+            this.watchlistDao = DatabaseManager.getDatabaseInstance().getWatchlistMovieEntity();
         } catch (SQLException e) {
             throw new RuntimeException("Error initializing WatchlistRepository", e);
         }

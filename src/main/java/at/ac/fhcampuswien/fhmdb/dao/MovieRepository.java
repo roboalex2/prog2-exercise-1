@@ -14,12 +14,8 @@ public class MovieRepository {
 
     public MovieRepository() {
         try {
-            // Holen der ConnectionSource von DatabaseManager, um eine Verbindung zur Datenbank herzustellen
-            ConnectionSource connectionSource = DatabaseManager.getDbInstance().getConnectionSource();
-            // Erstellen eines DAO (Data Access Object) für MovieEntity
-            this.movieDao = DaoManager.createDao(connectionSource, MovieEntity.class);
+            this.movieDao = DatabaseManager.getDatabaseInstance().getMovieRepositoryDao();
         } catch (SQLException e) {
-            // Wirft einer RuntimeException, wenn eine SQL-Fehler bei der Initialisierung auftritt
             throw new RuntimeException("Error initializing MovieRepository", e);
         }
     }
