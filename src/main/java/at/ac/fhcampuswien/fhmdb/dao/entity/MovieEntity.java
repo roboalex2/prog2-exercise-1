@@ -5,7 +5,10 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "movies")
 public class MovieEntity {
     @DatabaseField(id = true)
-    private int apiId;
+    private long id;
+
+    @DatabaseField(unique = true)
+    private String apiId;
 
     @DatabaseField
     private String title;
@@ -19,11 +22,11 @@ public class MovieEntity {
     @DatabaseField
     private String description;
 
-    // Default constructor is needed for ORMLite
     public MovieEntity() {
     }
 
-    public MovieEntity(int apiId, String title, int year, String genres, String description) {
+    public MovieEntity(long id, String apiId, String title, int year, String genres, String description) {
+        this.id = id;
         this.apiId = apiId;
         this.title = title;
         this.year = year;
@@ -31,12 +34,19 @@ public class MovieEntity {
         this.description = description;
     }
 
-    // Getters and setters
-    public int getApiId() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getApiId() {
         return apiId;
     }
 
-    public void setApiId(int apiId) {
+    public void setApiId(String apiId) {
         this.apiId = apiId;
     }
 
