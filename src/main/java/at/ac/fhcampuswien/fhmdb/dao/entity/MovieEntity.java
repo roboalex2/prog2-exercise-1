@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "movies")
 public class MovieEntity {
-    @DatabaseField(id = true)
+    @DatabaseField(id = true, generatedId = true)
     private long id;
 
     @DatabaseField(unique = true)
@@ -25,8 +25,7 @@ public class MovieEntity {
     public MovieEntity() {
     }
 
-    public MovieEntity(long id, String apiId, String title, int year, String genres, String description) {
-        this.id = id;
+    public MovieEntity(String apiId, String title, int year, String genres, String description) {
         this.apiId = apiId;
         this.title = title;
         this.year = year;

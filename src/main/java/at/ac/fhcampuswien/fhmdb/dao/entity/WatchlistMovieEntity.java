@@ -6,17 +6,16 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "watchlist")
 public class WatchlistMovieEntity {
 
-    @DatabaseField(id = true)
+    @DatabaseField(id = true, generatedId = true)
     private long id;
 
-    @DatabaseField(foreign = true, columnName = "apiId", foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, columnName = "apiId", foreignAutoRefresh = true, unique = true)
     private MovieEntity movieEntity;
 
     public WatchlistMovieEntity() {
     }
 
-    public WatchlistMovieEntity(long id, MovieEntity movieEntity) {
-        this.id = id;
+    public WatchlistMovieEntity(MovieEntity movieEntity) {
         this.movieEntity = movieEntity;
     }
 
