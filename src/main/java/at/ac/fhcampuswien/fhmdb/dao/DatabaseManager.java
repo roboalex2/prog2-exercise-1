@@ -2,12 +2,14 @@ package at.ac.fhcampuswien.fhmdb.dao;
 
 
 import at.ac.fhcampuswien.fhmdb.dao.entity.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.dao.entity.WatchlistMovieEntity;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class DatabaseManager {
 
@@ -63,11 +65,11 @@ public class DatabaseManager {
         return connectionSource;
     }
 
-    public Dao<MovieEntity, Integer> getMovieRepositoryDao() throws SQLException {
+    public Dao<MovieEntity, UUID> getMovieRepositoryDao() throws SQLException {
         return DaoManager.createDao(connectionSource, MovieEntity.class);
     }
 
-    public Dao<WatchlistRepository, Integer> getWatchlistRepositoryDao() throws SQLException {
-        return DaoManager.createDao(connectionSource, WatchlistRepository.class);
+    public Dao<WatchlistMovieEntity, UUID> getWatchlistMovieEntity() throws SQLException {
+        return DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
     }
 }
