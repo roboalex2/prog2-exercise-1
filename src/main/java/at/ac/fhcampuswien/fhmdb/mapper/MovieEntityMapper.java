@@ -19,7 +19,10 @@ public class MovieEntityMapper {
                 movie.getTitle(),
                 movie.getReleaseYear(),
                 genresToString(movie.getGenres()),
-                movie.getDescription())
+                movie.getDescription(),
+                movie.getImgUrl(),
+                movie.getLengthInMinutes(),
+                movie.getRating())
             )
             .toList();
     }
@@ -32,12 +35,12 @@ public class MovieEntityMapper {
                 movie.getDescription(),
                 movie.getYear(),
                 stringToGenres(movie.getGenres()),
-                null,
+                movie.getImgUrl(),
                 List.of(),
                 List.of(),
                 List.of(),
-                -1,
-                -1d)
+                movie.getLengthInMinutes(),
+                movie.getRating())
             )
             .toList();
     }
