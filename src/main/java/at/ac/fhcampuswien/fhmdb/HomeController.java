@@ -34,7 +34,7 @@ public class HomeController implements Initializable {
     private static final String NO_GENRE_TEXT = "No Genre Filter";
 
     @FXML
-    public JFXButton watchlistButton; // new code
+    public JFXButton watchlistButton;
     @FXML
     public JFXButton searchBtn;
 
@@ -61,7 +61,7 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        watchlistButton.setOnAction(this::showWatchlist); // new code
+        watchlistButton.setOnAction(this::showWatchlist);
 
         observableMovies.addAll(MovieStateManager.getInstance().fetchAllMovies());
 
