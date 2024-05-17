@@ -16,7 +16,7 @@
         <Label styleClass="text-white" stylesheets="@styles.css" text="Your Watchlist" />
         <JFXButton text="Home" fx:id="homeButton" onAction="#showHome" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
-    <VBox alignment="CENTER" prefHeight="558.0" prefWidth="800.0">
-        <JFXListView fx:id="watchlistListView"/>
+    <VBox alignment="CENTER" VBox.vgrow="ALWAYS" prefWidth="800.0">
+        <JFXListView fx:id="watchlistListView" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS"/>
     </VBox>
 </VBox>
