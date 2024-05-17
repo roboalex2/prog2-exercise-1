@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.WatchlistController">
+<VBox prefHeight="620.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.WatchlistController">
     <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: black;">
         <Label style="-fx-background-color: F5C518;" text="FHMDb">
             <font>
