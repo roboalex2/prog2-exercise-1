@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.WatchlistController">
+    <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: black;">
+        <Label style="-fx-background-color: F5C518;" text="FHMDb">
+            <font>
+                <Font name="Calibri Bold" size="24.0" />
+            </font>
+        </Label>
+        <Label styleClass="text-white" stylesheets="@styles.css" text="Your Watchlist" />
+        <JFXButton text="Home" fx:id="homeButton" onAction="#showHome" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+    </HBox>
+    <VBox alignment="CENTER" prefHeight="558.0" prefWidth="800.0">
+        <Label text="Watchlist View"/>
+    </VBox>
+</VBox>

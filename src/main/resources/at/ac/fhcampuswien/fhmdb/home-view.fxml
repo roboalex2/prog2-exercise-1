@@ -24,7 +24,7 @@
                 </padding>
             </Label>
             <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
-            <JFXButton text="Home" fx:id="homeButton" onAction="#showHome" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+            <JFXButton text="Home" fx:id="homeButton" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
             <JFXButton text="Watchlist" fx:id="watchlistButton" onAction="#showWatchlist" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
         </children>
     </HBox>

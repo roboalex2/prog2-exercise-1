@@ -1,5 +1,10 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import javafx.fxml.FXMLLoader; // new code
+import javafx.scene.Scene; // new code
+import javafx.stage.Stage; // new code
+import java.io.IOException; // new code
+
 import at.ac.fhcampuswien.fhmdb.manager.MovieStateManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -30,6 +35,8 @@ public class HomeController implements Initializable {
     private static final String NO_GENRE_TEXT = "No Genre Filter";
 
     @FXML
+    public JFXButton watchlistButton; // new code
+    @FXML
     public JFXButton searchBtn;
 
     @FXML
@@ -54,6 +61,8 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        watchlistButton.setOnAction(this::showWatchlist); // new code
 
         observableMovies.addAll(MovieStateManager.getInstance().fetchAllMovies());
 
@@ -171,10 +180,15 @@ public class HomeController implements Initializable {
         return null;
     }
 
-    public void showHome(ActionEvent actionEvent) {
-    }
 
     public void showWatchlist(ActionEvent actionEvent) {
-
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("watchlist-view.fxml")); // new code
+            Scene scene = new Scene(fxmlLoader.load()); // new code
+            Stage stage = (Stage) ((JFXButton) actionEvent.getSource()).getScene().getWindow(); // new code
+            stage.setScene(scene); // new code
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
