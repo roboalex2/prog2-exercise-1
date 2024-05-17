@@ -124,8 +124,7 @@ public class HomeController implements Initializable {
 
         // We no longer use the API filter and use our filter logic because we want easy database support.
         // MovieRequestParameter params = new MovieRequestParameter(searchQuery, searchGenre, searchReleaseDate, searchRating);
-        // List<Movie> searchResult = fetchAllMovies(params);
-        List<Movie> searchResult = List.of();
+        List<Movie> searchResult = MovieStateManager.getInstance().fetchAllMovies();
 
         // Keep exercise one logic working
         if (searchQuery != null) {

@@ -17,6 +17,8 @@ import java.util.Objects;
 
 public class MovieStateManager {
 
+    public static final String USERNAME = "moviedb";
+    public static final String PASSWORD = "movie123";
     private MovieApi movieApi = new MovieApi();
     private MovieRepository movieRepository;
     private WatchlistRepository watchlistRepository;
@@ -39,7 +41,7 @@ public class MovieStateManager {
     public void reinitializeDatabase() {
         DatabaseManager databaseInstance = DatabaseManager.getDatabaseInstance();
         try {
-            databaseInstance.createConnectionSource("moviedb", "movie123");
+            databaseInstance.createConnectionSource(USERNAME, PASSWORD);
             databaseInstance.createTables();
 
             this.movieRepository = new MovieRepository();
