@@ -1,6 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.exception;
 
-import java.io.IOException;
+import java.sql.SQLException;
 
-public class DatabaseException extends IOException {
+public class DatabaseException extends SQLException {
+
+    public DatabaseException(String message, SQLException exception) {
+        super(message, exception);
+    }
 }

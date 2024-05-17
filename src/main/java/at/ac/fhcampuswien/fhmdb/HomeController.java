@@ -1,12 +1,13 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.util.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.api.MovieApi;
+import at.ac.fhcampuswien.fhmdb.dao.DatabaseManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieRequestParameter;
 import at.ac.fhcampuswien.fhmdb.models.SortOrder;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.util.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.util.MovieUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -60,7 +61,7 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        observableMovies.addAll(fetchMovies(new MovieRequestParameter()));
+        observableMovies.addAll(fetchAllMovies());
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -119,7 +120,7 @@ public class HomeController implements Initializable {
         Integer searchReleaseDate = getSearchReleaseDate();
 
         MovieRequestParameter params = new MovieRequestParameter(searchQuery, searchGenre, searchReleaseDate, searchRating);
-        List<Movie> searchResult = fetchMovies(params);
+        List<Movie> searchResult = fetchAllMovies(params);
 
         // Keep exercise one logic working
         if (searchQuery != null) {
@@ -139,17 +140,26 @@ public class HomeController implements Initializable {
         observableMovies.setAll(searchResult);
     }
 
-    private List<Movie> fetchMovies(MovieRequestParameter movieRequestParameter) {
+
+    private void initialiseDatabase() {
+        DatabaseManager databaseInstance = DatabaseManager.getDatabaseInstance();
+    }
+
+    private List<Movie> fetchAllMovies() {
+
+        List<Movie> movies = List.of();
         try {
-            return movieApi.fetchMovies(movieRequestParameter);
+            movies = movieApi.fetchMovies(new MovieRequestParameter());
         } catch (IOException exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Failed to load movie Data!");
-            alert.setContentText("The application failed to retrieve data from the server. Check your network connection. Details: " + exception.getMessage());
+            alert.setContentText("The application failed to retrieve data from the server. Check your network connection. Using local database instead. Details: " + exception.getMessage());
             alert.show();
-            return List.of();
         }
+
+
     }
+
 
     private Double getSearchRating() {
         if (ratingField.getText() == null || ratingField.getText().isBlank()) {
