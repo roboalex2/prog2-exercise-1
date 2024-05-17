@@ -75,7 +75,7 @@ public class DatabaseManager {
         }
     }
 
-    public Dao<WatchlistMovieEntity, Long> getWatchlistMovieEntity() throws DatabaseException {
+    public Dao<WatchlistMovieEntity, Long> getWatchlistMovieDao() throws DatabaseException {
         if (connectionSource == null) {
             throw new UnsupportedOperationException("ConnectionSource has not been created yet. Create with createConnectionSource(..)");
         }

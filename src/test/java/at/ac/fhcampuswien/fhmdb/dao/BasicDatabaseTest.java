@@ -16,7 +16,7 @@ public class BasicDatabaseTest {
     @BeforeAll
     public static void setUp() throws SQLException {
         databaseInstance = DatabaseManager.getDatabaseInstance();
-        databaseInstance.createConnectionSource("jdbc:h2:~/movie_test_db", "roboalex2", "test");
+        databaseInstance.createConnectionSource("jdbc:h2:~/movie_test_db", "moviedb", "movie123");
     }
 
 

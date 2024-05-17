@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.dao;
 
 import at.ac.fhcampuswien.fhmdb.dao.entity.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.exception.DatabaseException;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -11,8 +12,8 @@ public class WatchlistRepository {
     //fetch all Movie Entities
     private Dao<WatchlistMovieEntity, Long> watchlistDao;
 
-    public WatchlistRepository() throws SQLException {
-        this.watchlistDao = DatabaseManager.getDatabaseInstance().getWatchlistMovieEntity();
+    public WatchlistRepository() throws DatabaseException {
+        this.watchlistDao = DatabaseManager.getDatabaseInstance().getWatchlistMovieDao();
     }
 
     public List<WatchlistMovieEntity> getAllWatchlistMovies() throws SQLException {

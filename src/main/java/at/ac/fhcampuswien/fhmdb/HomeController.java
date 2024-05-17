@@ -2,6 +2,10 @@ package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieApi;
 import at.ac.fhcampuswien.fhmdb.dao.DatabaseManager;
+import at.ac.fhcampuswien.fhmdb.dao.MovieRepository;
+import at.ac.fhcampuswien.fhmdb.dao.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exception.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.mapper.MovieEntityMapper;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieRequestParameter;
@@ -22,6 +26,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -57,9 +62,12 @@ public class HomeController implements Initializable {
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
     private MovieApi movieApi = new MovieApi();
+    private MovieRepository movieRepository;
+    private WatchlistRepository watchlistRepository;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        initializeDatabase();
 
         observableMovies.addAll(fetchAllMovies());
 
@@ -119,8 +127,10 @@ public class HomeController implements Initializable {
         Genre searchGenre = getSearchGenre();
         Integer searchReleaseDate = getSearchReleaseDate();
 
-        MovieRequestParameter params = new MovieRequestParameter(searchQuery, searchGenre, searchReleaseDate, searchRating);
-        List<Movie> searchResult = fetchAllMovies(params);
+        // We no longer use the API filter and use our filter logic because we want easy database support.
+        // MovieRequestParameter params = new MovieRequestParameter(searchQuery, searchGenre, searchReleaseDate, searchRating);
+        // List<Movie> searchResult = fetchAllMovies(params);
+        List<Movie> searchResult = List.of();
 
         // Keep exercise one logic working
         if (searchQuery != null) {
@@ -141,12 +151,24 @@ public class HomeController implements Initializable {
     }
 
 
-    private void initialiseDatabase() {
+    private void initializeDatabase() {
         DatabaseManager databaseInstance = DatabaseManager.getDatabaseInstance();
+        try {
+            databaseInstance.createConnectionSource("moviedb", "movie123");
+            databaseInstance.createTables();
+
+            this.movieRepository = new MovieRepository();
+            this.watchlistRepository = new WatchlistRepository();
+        } catch (DatabaseException | UnsupportedOperationException exception) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Failed to use local database!");
+            alert.setContentText("The application failed to access the local database. Details: " + exception.getMessage());
+            alert.show();
+            exception.printStackTrace();
+        }
     }
 
     private List<Movie> fetchAllMovies() {
-
         List<Movie> movies = List.of();
         try {
             movies = movieApi.fetchMovies(new MovieRequestParameter());
@@ -157,7 +179,24 @@ public class HomeController implements Initializable {
             alert.show();
         }
 
+        if (movieRepository != null) {
+            try {
+                if (!movies.isEmpty()) {
+                    movieRepository.addMovies(MovieEntityMapper.fromMovies(movies));
+                }
 
+                movies = MovieEntityMapper.toMovies(movieRepository.getAllMovies());
+            } catch (SQLException exception) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Failed to access MOVIES table!");
+                alert.setContentText("The application failed to retrieve movies from the movie db." +
+                        (!movies.isEmpty() ? " Using API only. " : " API and DB failed no movies available. ") +
+                        "Details: " + exception.getMessage());
+                alert.show();
+            }
+        }
+
+        return movies;
     }
 
 
