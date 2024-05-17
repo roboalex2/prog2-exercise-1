@@ -101,9 +101,7 @@ public class HomeController implements Initializable {
     }
 
     private final ClickEventHandler<Movie> onAddToWatchlistClicked = (clickedItem) -> {
-        // Add code to add movie to watchlist here
-        System.out.println("Added to watchlist: " + clickedItem.getTitle());
-        // Example: WatchlistRepository.addMovie(clickedItem);
+        MovieStateManager.getInstance().addMovieToWatchlist(clickedItem);
     };
 
     private void onSortButtonClick(ActionEvent actionEvent) {
@@ -192,10 +190,4 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void showAlert(String title, String message) { // new code
-        Alert alert = new Alert(Alert.AlertType.INFORMATION); // new code
-        alert.setTitle(title); // new code
-        alert.setContentText(message); // new code
-        alert.show(); // new code
-    } // new code
 }

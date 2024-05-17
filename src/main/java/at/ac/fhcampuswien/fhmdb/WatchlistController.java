@@ -28,36 +28,32 @@ public class WatchlistController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableWatchlistMovies.addAll(MovieStateManager.getInstance().fetchWatchlistMovies());
-        watchlistListView.setItems(observableWatchlistMovies);
-        watchlistListView.setCellFactory(watchlistListView -> new MovieCell(onRemoveFromWatchlistClicked));
+        observableWatchlistMovies.addAll(MovieStateManager.getInstance().fetchWatchlistMovies()); // new code
+        watchlistListView.setItems(observableWatchlistMovies); // new code
+        watchlistListView.setCellFactory(watchlistListView -> new MovieCell(onRemoveFromWatchlistClicked)); // new code
     }
 
-    private final ClickEventHandler<Movie> onRemoveFromWatchlistClicked = (clickedItem) -> {
-        boolean success = MovieStateManager.getInstance().removeMovieFromWatchlist(clickedItem);
-        if (success) {
-            observableWatchlistMovies.remove(clickedItem);
-            showAlert("Success", "Movie removed from watchlist!");
-        } else {
-            showAlert("Error", "Failed to remove movie from watchlist.");
-        }
-    };
+    private final ClickEventHandler<Movie> onRemoveFromWatchlistClicked = (clickedItem) -> { // new code
+        MovieStateManager.getInstance().removeMovieFromWatchlist(clickedItem);
+        observableWatchlistMovies.setAll(MovieStateManager.getInstance().fetchWatchlistMovies());
 
-    public void showHome(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("home-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    }; // new code
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.show();
-    }
+    public void showHome(ActionEvent actionEvent) { // new code
+        try { // new code
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("home-view.fxml")); // new code
+            Scene scene = new Scene(fxmlLoader.load()); // new code
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(); // new code
+            stage.setScene(scene); // new code
+        } catch (IOException e) { // new code
+            e.printStackTrace(); // new code
+        } // new code
+    } // new code
+
+    private void showAlert(String title, String message) { // new code
+        Alert alert = new Alert(Alert.AlertType.INFORMATION); // new code
+        alert.setTitle(title); // new code
+        alert.setContentText(message); // new code
+        alert.show(); // new code
+    } // new code
 }

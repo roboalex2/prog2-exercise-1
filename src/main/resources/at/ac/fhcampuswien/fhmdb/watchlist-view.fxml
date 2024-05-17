@@ -17,7 +17,6 @@
         <JFXButton text="Home" fx:id="homeButton" onAction="#showHome" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
     <VBox alignment="CENTER" prefHeight="558.0" prefWidth="800.0">
-        <JFXListView fx:id="watchlistListView"/> <!-- Ensure this matches the field name in the controller -->
-        <Label text="Watchlist View"/>
+        <JFXListView fx:id="watchlistListView"/>
     </VBox>
 </VBox>
