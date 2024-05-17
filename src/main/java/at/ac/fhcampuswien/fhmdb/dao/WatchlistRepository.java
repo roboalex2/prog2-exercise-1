@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb.dao;
 
 import at.ac.fhcampuswien.fhmdb.dao.entity.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.exception.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.manager.DatabaseManager;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class WatchlistRepository {
         }
     }
 
-    public void deleteMovieFromWatchlist(UUID apiId) {
+    public boolean deleteMovieFromWatchlist(UUID apiId) {
         try {
             WatchlistMovieEntity watchlistMovieEntity = watchlistDao.queryBuilder()
                     .where()
@@ -42,10 +43,12 @@ public class WatchlistRepository {
             if (watchlistMovieEntity != null) {
                 // Delete the WatchlistMovieEntity
                 watchlistDao.delete(watchlistMovieEntity);
+                return true;
             }
         } catch (SQLException exception) {
             throw new DatabaseException(exception);
         }
+        return false;
     }
 
     public void deleteAllWatchlistMovies() {

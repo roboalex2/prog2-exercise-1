@@ -1,4 +1,4 @@
-package at.ac.fhcampuswien.fhmdb.dao;
+package at.ac.fhcampuswien.fhmdb.manager;
 
 
 import at.ac.fhcampuswien.fhmdb.dao.entity.MovieEntity;

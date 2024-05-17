@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb.dao;
 
 import at.ac.fhcampuswien.fhmdb.dao.entity.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.dao.entity.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.manager.DatabaseManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

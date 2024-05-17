@@ -1,14 +1,8 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.api.MovieApi;
-import at.ac.fhcampuswien.fhmdb.dao.DatabaseManager;
-import at.ac.fhcampuswien.fhmdb.dao.MovieRepository;
-import at.ac.fhcampuswien.fhmdb.dao.WatchlistRepository;
-import at.ac.fhcampuswien.fhmdb.exception.DatabaseException;
-import at.ac.fhcampuswien.fhmdb.mapper.MovieEntityMapper;
+import at.ac.fhcampuswien.fhmdb.manager.MovieStateManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.MovieRequestParameter;
 import at.ac.fhcampuswien.fhmdb.models.SortOrder;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.util.ClickEventHandler;
@@ -21,12 +15,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -61,15 +52,10 @@ public class HomeController implements Initializable {
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
-    private MovieApi movieApi = new MovieApi();
-    private MovieRepository movieRepository;
-    private WatchlistRepository watchlistRepository;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeDatabase();
 
-        observableMovies.addAll(fetchAllMovies());
+        observableMovies.addAll(MovieStateManager.getInstance().fetchAllMovies());
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -149,57 +135,6 @@ public class HomeController implements Initializable {
 
         observableMovies.setAll(searchResult);
     }
-
-
-    private void initializeDatabase() {
-        DatabaseManager databaseInstance = DatabaseManager.getDatabaseInstance();
-        try {
-            databaseInstance.createConnectionSource("moviedb", "movie123");
-            databaseInstance.createTables();
-
-            this.movieRepository = new MovieRepository();
-            this.watchlistRepository = new WatchlistRepository();
-        } catch (SQLException | UnsupportedOperationException exception) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Failed to use local database!");
-            alert.setContentText("The application failed to access the local database. Details: " + exception.getMessage());
-            alert.show();
-            exception.printStackTrace();
-        }
-    }
-
-    private List<Movie> fetchAllMovies() {
-        List<Movie> movies = List.of();
-        try {
-            movies = movieApi.fetchMovies(new MovieRequestParameter());
-        } catch (IOException exception) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Failed to load movie Data!");
-            alert.setContentText("The application failed to retrieve data from the server. Check your network connection. Using local database instead. Details: " + exception.getMessage());
-            alert.show();
-        }
-
-        if (movieRepository != null) {
-            try {
-                if (!movies.isEmpty()) {
-                    MovieEntityMapper.fromMovies(movies)
-                            .forEach(movieRepository::addMovie);
-                }
-
-                movies = MovieEntityMapper.toMovies(movieRepository.getAllMovies());
-            } catch (DatabaseException exception) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Failed to access MOVIES table!");
-                alert.setContentText("The application failed to retrieve movies from the movie db." +
-                        (!movies.isEmpty() ? " Using API only. " : " API and DB failed no movies available. ") +
-                        "Details: " + exception.getMessage());
-                alert.show();
-            }
-        }
-
-        return movies;
-    }
-
 
     private Double getSearchRating() {
         if (ratingField.getText() == null || ratingField.getText().isBlank()) {
