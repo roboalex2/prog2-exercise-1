@@ -1,6 +1,8 @@
 package at.ac.fhcampuswien.fhmdb.util;
 
-import at.ac.fhcampuswien.fhmdb.models.*;
+import at.ac.fhcampuswien.fhmdb.models.Genre;
+import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.models.SortOrder;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -236,7 +238,7 @@ class MovieUtilsTest {
         );
 
         // When
-        List<Movie> actualMovies = MovieUtils.filter(givenMovies, filterGenre);
+        List<Movie> actualMovies = MovieUtils.filterGenre(givenMovies, filterGenre);
 
         // Then
         assertEquals(expectedMovies, actualMovies);

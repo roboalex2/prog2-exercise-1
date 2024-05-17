@@ -129,7 +129,15 @@ public class HomeController implements Initializable {
         }
 
         if (searchGenre != null) {
-            searchResult = MovieUtils.filter(searchResult, searchGenre);
+            searchResult = MovieUtils.filterGenre(searchResult, searchGenre);
+        }
+
+        if (searchReleaseDate != null) {
+            searchResult = MovieUtils.filterReleaseYear(searchResult, searchReleaseDate);
+        }
+
+        if (searchRating != null) {
+            searchResult = MovieUtils.filterRating(searchResult, searchRating);
         }
 
         if (sortBtn.getText() != null && sortBtn.getText().contains("des")) {

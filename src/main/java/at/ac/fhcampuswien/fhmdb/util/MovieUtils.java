@@ -26,9 +26,23 @@ public class MovieUtils {
     }
 
     // Filter for movies containing the specified genre
-    public static List<Movie> filter(List<Movie> movies, Genre filterGenre) {
+    public static List<Movie> filterGenre(List<Movie> movies, Genre filterGenre) {
         return movies.stream()
                 .filter(movie -> movie.getGenres().contains(filterGenre))
+                .toList();
+    }
+
+    // Filter for movies containing the specified genre
+    public static List<Movie> filterReleaseYear(List<Movie> movies, int releaseYear) {
+        return movies.stream()
+                .filter(movie -> movie.getReleaseYear() == releaseYear)
+                .toList();
+    }
+
+    // Filter for movies containing the specified genre
+    public static List<Movie> filterRating(List<Movie> movies, double rating) {
+        return movies.stream()
+                .filter(movie -> movie.getRating() >= rating)
                 .toList();
     }
 
