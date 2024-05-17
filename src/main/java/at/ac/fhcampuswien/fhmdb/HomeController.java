@@ -1,11 +1,5 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import java.io.IOException;
-import javafx.scene.control.Alert;
-
 import at.ac.fhcampuswien.fhmdb.manager.MovieStateManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -20,10 +14,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
-
+import java.io.IOException;
 import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -100,8 +97,8 @@ public class HomeController implements Initializable {
         });
     }
 
-    private final ClickEventHandler<Movie> onAddToWatchlistClicked = (clickedItem) -> {
-        MovieStateManager.getInstance().addMovieToWatchlist(clickedItem);
+    private final ClickEventHandler<Movie> onAddToWatchlistClicked = (clickedMovie) -> {
+        MovieStateManager.getInstance().addMovieToWatchlist(clickedMovie);
     };
 
     private void onSortButtonClick(ActionEvent actionEvent) {

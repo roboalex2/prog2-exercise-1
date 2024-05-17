@@ -33,6 +33,17 @@ public class WatchlistRepository {
         }
     }
 
+    public WatchlistMovieEntity fetchMovieEntity(UUID apiId) {
+        try {
+            return watchlistDao.queryBuilder()
+                    .where()
+                    .eq("apiId", apiId)
+                    .queryForFirst();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
     public boolean deleteMovieFromWatchlist(UUID apiId) {
         try {
             WatchlistMovieEntity watchlistMovieEntity = watchlistDao.queryBuilder()
