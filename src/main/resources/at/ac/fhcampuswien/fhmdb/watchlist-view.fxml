@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -16,6 +17,7 @@
         <JFXButton text="Home" fx:id="homeButton" onAction="#showHome" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
     <VBox alignment="CENTER" prefHeight="558.0" prefWidth="800.0">
+        <JFXListView fx:id="watchlistListView"/> <!-- Ensure this matches the field name in the controller -->
         <Label text="Watchlist View"/>
     </VBox>
 </VBox>

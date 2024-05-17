@@ -1,9 +1,10 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import javafx.fxml.FXMLLoader; // new code
-import javafx.scene.Scene; // new code
-import javafx.stage.Stage; // new code
-import java.io.IOException; // new code
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
+import javafx.scene.control.Alert;
 
 import at.ac.fhcampuswien.fhmdb.manager.MovieStateManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
@@ -21,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+
 
 import java.net.URL;
 import java.time.OffsetDateTime;
@@ -182,12 +184,18 @@ public class HomeController implements Initializable {
 
     public void showWatchlist(ActionEvent actionEvent) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("watchlist-view.fxml")); // new code
-            Scene scene = new Scene(fxmlLoader.load()); // new code
-            Stage stage = (Stage) ((JFXButton) actionEvent.getSource()).getScene().getWindow(); // new code
-            stage.setScene(scene); // new code
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("watchlist-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = (Stage) ((JFXButton) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    private void showAlert(String title, String message) { // new code
+        Alert alert = new Alert(Alert.AlertType.INFORMATION); // new code
+        alert.setTitle(title); // new code
+        alert.setContentText(message); // new code
+        alert.show(); // new code
+    } // new code
 }
