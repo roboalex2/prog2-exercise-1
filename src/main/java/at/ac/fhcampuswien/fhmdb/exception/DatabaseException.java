@@ -1,10 +1,12 @@
 package at.ac.fhcampuswien.fhmdb.exception;
 
-import java.sql.SQLException;
+public class DatabaseException extends RuntimeException {
 
-public class DatabaseException extends SQLException {
-
-    public DatabaseException(String message, SQLException exception) {
+    public DatabaseException(String message, Exception exception) {
         super(message, exception);
+    }
+
+    public DatabaseException(Exception exception) {
+        super(exception);
     }
 }

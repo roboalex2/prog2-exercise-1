@@ -3,7 +3,6 @@ package at.ac.fhcampuswien.fhmdb.dao;
 
 import at.ac.fhcampuswien.fhmdb.dao.entity.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.dao.entity.WatchlistMovieEntity;
-import at.ac.fhcampuswien.fhmdb.exception.DatabaseException;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -32,20 +31,16 @@ public class DatabaseManager {
         return databaseInstance;
     }
 
-    public void createConnectionSource(String username, String password) throws DatabaseException {
+    public void createConnectionSource(String username, String password) throws SQLException {
         createConnectionSource(DATA_BASE_URL, username, password);
     }
 
-    public void createConnectionSource(String dbUrl, String username, String password) throws DatabaseException {
+    public void createConnectionSource(String dbUrl, String username, String password) throws SQLException {
         if (connectionSource != null) {
             throw new UnsupportedOperationException("ConnectionSource has already been created. Close before with closeConnectionSource()");
         }
 
-        try {
-            connectionSource = new JdbcConnectionSource(dbUrl, username, password);
-        } catch (SQLException exception) {
-            throw new DatabaseException("Failed to create database connection.", exception);
-        }
+        connectionSource = new JdbcConnectionSource(dbUrl, username, password);
     }
 
     public void closeConnectionSource() {
@@ -63,40 +58,28 @@ public class DatabaseManager {
         return connectionSource;
     }
 
-    public Dao<MovieEntity, UUID> getMovieRepositoryDao() throws DatabaseException {
+    public Dao<MovieEntity, UUID> getMovieRepositoryDao() throws SQLException {
         if (connectionSource == null) {
             throw new UnsupportedOperationException("ConnectionSource has not been created yet. Create with createConnectionSource(..)");
         }
 
-        try {
-            return DaoManager.createDao(connectionSource, MovieEntity.class);
-        } catch (SQLException exception) {
-            throw new DatabaseException("Failed to access MOVIES table.", exception);
-        }
+        return DaoManager.createDao(connectionSource, MovieEntity.class);
     }
 
-    public Dao<WatchlistMovieEntity, Long> getWatchlistMovieDao() throws DatabaseException {
+    public Dao<WatchlistMovieEntity, Long> getWatchlistMovieDao() throws SQLException {
         if (connectionSource == null) {
             throw new UnsupportedOperationException("ConnectionSource has not been created yet. Create with createConnectionSource(..)");
         }
 
-        try {
-            return DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
-        } catch (SQLException exception) {
-            throw new DatabaseException("Failed to access WATCHLIST table.", exception);
-        }
+        return DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
     }
 
-    public void createTables() throws DatabaseException {
+    public void createTables() throws SQLException {
         if (connectionSource == null) {
             throw new UnsupportedOperationException("ConnectionSource has not been created yet. Create with createConnectionSource(..)");
         }
 
-        try {
-            TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
-            TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
-        } catch (SQLException exception) {
-            throw new DatabaseException("Failed to create tables.", exception);
-        }
+        TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
     }
 }

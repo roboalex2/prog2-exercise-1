@@ -11,27 +11,39 @@ import java.util.UUID;
 public class MovieRepository {
     private Dao<MovieEntity, UUID> movieDao;
 
-    public MovieRepository() throws DatabaseException {
+    public MovieRepository() throws SQLException {
         this.movieDao = DatabaseManager.getDatabaseInstance().getMovieRepositoryDao();
     }
 
-    public List<MovieEntity> getAllMovies() throws SQLException {
-        return movieDao.queryForAll();
+    public List<MovieEntity> getAllMovies() {
+        try {
+            return movieDao.queryForAll();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
     }
 
-    public void addMovie(MovieEntity movie) throws SQLException {
-        movieDao.createOrUpdate(movie);
+    public void addMovie(MovieEntity movie) {
+        try {
+            movieDao.createOrUpdate(movie);
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
     }
 
-    public void addMovies(List<MovieEntity> movies) throws SQLException {
-        movieDao.create(movies);
+    public void deleteMovie(UUID apiId) {
+        try {
+            movieDao.deleteById(apiId);
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
     }
 
-    public void deleteMovie(UUID apiId) throws SQLException {
-        movieDao.deleteById(apiId);
-    }
-
-    public void deleteAllMovies() throws SQLException {
-        movieDao.deleteBuilder().delete();
+    public void deleteAllMovies() {
+        try {
+            movieDao.deleteBuilder().delete();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
     }
 }

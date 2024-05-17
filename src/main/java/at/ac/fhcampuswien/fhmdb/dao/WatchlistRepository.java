@@ -12,31 +12,47 @@ public class WatchlistRepository {
     //fetch all Movie Entities
     private Dao<WatchlistMovieEntity, Long> watchlistDao;
 
-    public WatchlistRepository() throws DatabaseException {
+    public WatchlistRepository() throws SQLException {
         this.watchlistDao = DatabaseManager.getDatabaseInstance().getWatchlistMovieDao();
     }
 
-    public List<WatchlistMovieEntity> getAllWatchlistMovies() throws SQLException {
-        return watchlistDao.queryForAll();
-    }
-
-    public void addMoviesToWatchlist(WatchlistMovieEntity watchlistMovie) throws SQLException {
-        watchlistDao.createOrUpdate(watchlistMovie);
-    }
-
-    public void deleteMovieFromWatchlist(UUID apiId) throws SQLException {
-        WatchlistMovieEntity watchlistMovieEntity = watchlistDao.queryBuilder()
-            .where()
-            .eq("apiId", apiId)
-            .queryForFirst();
-
-        if (watchlistMovieEntity != null) {
-            // Delete the WatchlistMovieEntity
-            watchlistDao.delete(watchlistMovieEntity);
+    public List<WatchlistMovieEntity> getAllWatchlistMovies() {
+        try {
+            return watchlistDao.queryForAll();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
         }
     }
 
-    public void deleteAllWatchlistMovies() throws SQLException {
-        watchlistDao.deleteBuilder().delete();
+    public void addMoviesToWatchlist(WatchlistMovieEntity watchlistMovie) {
+        try {
+            watchlistDao.createOrUpdate(watchlistMovie);
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
+    public void deleteMovieFromWatchlist(UUID apiId) {
+        try {
+            WatchlistMovieEntity watchlistMovieEntity = watchlistDao.queryBuilder()
+                    .where()
+                    .eq("apiId", apiId)
+                    .queryForFirst();
+
+            if (watchlistMovieEntity != null) {
+                // Delete the WatchlistMovieEntity
+                watchlistDao.delete(watchlistMovieEntity);
+            }
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
+    public void deleteAllWatchlistMovies() {
+        try {
+            watchlistDao.deleteBuilder().delete();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
     }
 }

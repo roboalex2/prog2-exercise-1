@@ -159,7 +159,7 @@ public class HomeController implements Initializable {
 
             this.movieRepository = new MovieRepository();
             this.watchlistRepository = new WatchlistRepository();
-        } catch (DatabaseException | UnsupportedOperationException exception) {
+        } catch (SQLException | UnsupportedOperationException exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Failed to use local database!");
             alert.setContentText("The application failed to access the local database. Details: " + exception.getMessage());
@@ -182,11 +182,12 @@ public class HomeController implements Initializable {
         if (movieRepository != null) {
             try {
                 if (!movies.isEmpty()) {
-                    movieRepository.addMovies(MovieEntityMapper.fromMovies(movies));
+                    MovieEntityMapper.fromMovies(movies)
+                            .forEach(movieRepository::addMovie);
                 }
 
                 movies = MovieEntityMapper.toMovies(movieRepository.getAllMovies());
-            } catch (SQLException exception) {
+            } catch (DatabaseException exception) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Failed to access MOVIES table!");
                 alert.setContentText("The application failed to retrieve movies from the movie db." +
