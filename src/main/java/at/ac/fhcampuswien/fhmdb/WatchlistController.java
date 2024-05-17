@@ -30,7 +30,7 @@ public class WatchlistController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableWatchlistMovies.addAll(MovieStateManager.getInstance().fetchWatchlistMovies()); // new code
         watchlistListView.setItems(observableWatchlistMovies); // new code
-        watchlistListView.setCellFactory(watchlistListView -> new MovieCell(onRemoveFromWatchlistClicked)); // new code
+        watchlistListView.setCellFactory(watchlistListView -> new MovieCell("Remove", onRemoveFromWatchlistClicked)); // new code
     }
 
     private final ClickEventHandler<Movie> onRemoveFromWatchlistClicked = (clickedItem) -> { // new code

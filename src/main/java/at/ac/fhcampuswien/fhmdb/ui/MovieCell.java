@@ -25,8 +25,9 @@ public class MovieCell extends ListCell<Movie> {
     private final Button addToWatchlist = new Button("Watchlist");
     private final HBox layout = new HBox(movieInfo, addToWatchlist);
 
-    public MovieCell(ClickEventHandler<Movie> addToWatchlistClicked) {
+    public MovieCell(String buttonText, ClickEventHandler<Movie> addToWatchlistClicked) {
         super();
+        this.addToWatchlist.setText(buttonText);
         addToWatchlist.setOnMouseClicked(mouseEvent -> {
             addToWatchlistClicked.onClick(getItem()); // Invoke the handler with the current item
         });
@@ -35,7 +36,6 @@ public class MovieCell extends ListCell<Movie> {
     @Override
     protected void updateItem(Movie movie, boolean empty) {
         super.updateItem(movie, empty);
-
         if (empty || movie == null) {
             setText(null);
             setGraphic(null);

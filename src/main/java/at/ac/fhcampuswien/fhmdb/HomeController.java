@@ -70,7 +70,7 @@ public class HomeController implements Initializable {
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
-        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // use custom cell factory to display data
+        movieListView.setCellFactory(movieListView -> new MovieCell("Watchlist", onAddToWatchlistClicked)); // use custom cell factory to display data
 
         genreComboBox.setValue(NO_GENRE_TEXT);
         ObservableList<String> genres = FXCollections.observableArrayList(NO_GENRE_TEXT);
