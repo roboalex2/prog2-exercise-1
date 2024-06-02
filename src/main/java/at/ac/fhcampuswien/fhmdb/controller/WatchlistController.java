@@ -1,5 +1,6 @@
-package at.ac.fhcampuswien.fhmdb;
+package at.ac.fhcampuswien.fhmdb.controller;
 
+import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.manager.MovieStateManager;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
@@ -19,7 +20,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class WatchlistController implements Initializable {
+public class WatchlistController implements IWatchlistController, Initializable {
+
+    private static WatchlistController instance;
+    public static synchronized WatchlistController getInstance() {
+        if (instance == null) {
+            instance = new WatchlistController();
+        }
+        return instance;
+    }
+    private WatchlistController() {}
 
     @FXML
     private JFXListView<Movie> watchlistListView;
@@ -37,14 +47,13 @@ public class WatchlistController implements Initializable {
         MovieStateManager.getInstance().removeMovieFromWatchlist(clickedMovie);
         observableWatchlistMovies.setAll(MovieStateManager.getInstance().fetchWatchlistMovies());
     };
-
-    public void showHome(ActionEvent actionEvent) {
+    @FXML
+    private void showHome(ActionEvent actionEvent) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("home-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
+            URL homeFxmlUrl = FhmdbApplication.class.getResource("home-view.fxml");
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-        } catch (IOException e) {
+            ControllerFactory.createController(HomeController.class, stage, homeFxmlUrl);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -1,5 +1,6 @@
-package at.ac.fhcampuswien.fhmdb;
+package at.ac.fhcampuswien.fhmdb.controller;
 
+import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.manager.MovieStateManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -16,7 +17,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -30,7 +33,8 @@ import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
 
-public class HomeController implements Initializable {
+public class HomeController implements IHomeController, Initializable {
+    private static HomeController instance;
     private static final String NO_GENRE_TEXT = "No Genre Filter";
 
     @FXML
@@ -58,6 +62,12 @@ public class HomeController implements Initializable {
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
+    public static synchronized HomeController getInstance() {
+        if (instance == null) {
+            instance = new HomeController();
+        }
+        return instance;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -97,6 +107,7 @@ public class HomeController implements Initializable {
         });
     }
 
+    private HomeController() {}
     private final ClickEventHandler<Movie> onAddToWatchlistClicked = (clickedMovie) -> {
         MovieStateManager.getInstance().addMovieToWatchlist(clickedMovie);
     };
@@ -184,14 +195,13 @@ public class HomeController implements Initializable {
         return null;
     }
 
-
-    public void showWatchlist(ActionEvent actionEvent) {
+    @FXML
+    private void showWatchlist(ActionEvent actionEvent) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("watchlist-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            Stage stage = (Stage) ((JFXButton) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-        } catch (IOException e) {
+            URL watchlistFxmlUrl = FhmdbApplication.class.getResource("watchlist-view.fxml");
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            ControllerFactory.createController(WatchlistController.class, stage, watchlistFxmlUrl);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
