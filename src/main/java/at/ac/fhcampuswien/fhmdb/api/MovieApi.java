@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -37,8 +36,15 @@ public class MovieApi {
         movieRequestParameter = Optional.ofNullable(movieRequestParameter)
             .orElse(new MovieRequestParameter());
 
+        String url = new MovieAPIRequestBuilder(BASE_URL)
+                .query(movieRequestParameter.getQuery())
+                .genre(movieRequestParameter.getGenre() != null ? movieRequestParameter.getGenre().toString() : null)
+                .releaseYear(movieRequestParameter.getReleaseYear() != null ? movieRequestParameter.getReleaseYear().toString() : null)
+                .ratingFrom(movieRequestParameter.getRatingFrom() != null ? movieRequestParameter.getRatingFrom().toString() : null)
+                .build();
+
         Request request = new Request.Builder()
-            .url(buildMovieUrl(movieRequestParameter))
+            .url(url)
             .addHeader("User-Agent", "Java FHMDb Client")
             .build();
 
@@ -53,32 +59,5 @@ public class MovieApi {
 
     private List<Movie> parseToMovies(String jsonArray) throws JsonProcessingException {
         return objectMapper.readValue(jsonArray, new TypeReference<List<Movie>>(){});
-    }
-
-    private HttpUrl buildMovieUrl(MovieRequestParameter params) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL).newBuilder();
-
-        if (!isNullOrEmpty(params.getQuery())) {
-            urlBuilder.addQueryParameter("query", params.getQuery());
-        }
-        if (!isNullOrEmpty(params.getGenre())) {
-            urlBuilder.addQueryParameter("genre", params.getGenre().toString());
-        }
-        if (!isNullOrEmpty(params.getRatingFrom())) {
-            urlBuilder.addQueryParameter("ratingFrom", params.getRatingFrom().toString());
-        }
-        if (!isNullOrEmpty(params.getReleaseYear())) {
-            urlBuilder.addQueryParameter("releaseYear", params.getReleaseYear().toString());
-        }
-
-        return urlBuilder.build();
-    }
-
-    private <T> boolean isNullOrEmpty(T element) {
-        if (element == null) {
-            return true;
-        }
-
-        return element.toString().isBlank();
     }
 }
