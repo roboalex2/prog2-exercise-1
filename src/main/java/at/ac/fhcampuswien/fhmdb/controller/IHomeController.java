@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public interface IHomeController {
+    static HomeController instance = null;
     final ObservableList<Movie> observableMovies = null;
     void initialize(URL url, ResourceBundle resourceBundle);
 

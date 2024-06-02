@@ -16,7 +16,6 @@ public class ControllerFactory {
         try {
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
 
-            // Set a custom controller factory to ensure singleton usage
             loader.setControllerFactory(clazz -> {
                 try {
                     Method getInstanceMethod = clazz.getMethod("getInstance");

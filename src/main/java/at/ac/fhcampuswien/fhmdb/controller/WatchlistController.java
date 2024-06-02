@@ -38,6 +38,7 @@ public class WatchlistController implements IWatchlistController, Initializable 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        observableWatchlistMovies.clear();
         observableWatchlistMovies.addAll(MovieStateManager.getInstance().fetchWatchlistMovies());
         watchlistListView.setItems(observableWatchlistMovies);
         watchlistListView.setCellFactory(watchlistListView -> new MovieCell("Remove", onRemoveFromWatchlistClicked));

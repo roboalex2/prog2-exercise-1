@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class FhmdbApplication extends Application {
 
-    public void start(Stage primaryStage) {
+    public void start(Stage Stage) {
         try {
             URL homeFxmlUrl = FhmdbApplication.class.getResource("home-view.fxml");
             URL watchlistFxmlUrl = FhmdbApplication.class.getResource("watchlist-view.fxml");
@@ -25,15 +25,8 @@ public class FhmdbApplication extends Application {
                 throw new IllegalStateException("FXML file not found");
             }
 
-            // Create WatchlistController
-            IWatchlistController watchlistController = ControllerFactory.createController(
-                    WatchlistController.class, primaryStage, watchlistFxmlUrl);
-
-            // Create HomeController
-            IHomeController homeController = ControllerFactory.createController(
-                    IHomeController.class, primaryStage, homeFxmlUrl);
-
-
+            ControllerFactory.createController(
+                    IHomeController.class, Stage, homeFxmlUrl);
 
         } catch (Exception e) {
             e.printStackTrace();

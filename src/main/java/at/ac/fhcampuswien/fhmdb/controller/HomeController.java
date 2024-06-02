@@ -70,7 +70,7 @@ public class HomeController implements IHomeController, Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        observableMovies.clear();
         watchlistButton.setOnAction(this::showWatchlist);
 
         observableMovies.addAll(MovieStateManager.getInstance().fetchAllMovies());
@@ -199,7 +199,7 @@ public class HomeController implements IHomeController, Initializable {
     private void showWatchlist(ActionEvent actionEvent) {
         try {
             URL watchlistFxmlUrl = FhmdbApplication.class.getResource("watchlist-view.fxml");
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((JFXButton) actionEvent.getSource()).getScene().getWindow();
             ControllerFactory.createController(WatchlistController.class, stage, watchlistFxmlUrl);
         } catch (Exception e) {
             e.printStackTrace();
