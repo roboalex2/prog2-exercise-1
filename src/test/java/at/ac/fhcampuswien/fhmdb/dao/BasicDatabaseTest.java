@@ -24,7 +24,7 @@ public class BasicDatabaseTest {
     @Test
     public void quickAndDirtyDbTest() throws SQLException {
         databaseInstance.createTables();
-        MovieRepository movieRepository = new MovieRepository();
+        MovieRepository movieRepository = MovieRepository.getInstance();
 
         UUID movieId = UUID.randomUUID();
 
@@ -33,7 +33,7 @@ public class BasicDatabaseTest {
         List<MovieEntity> allMovies = movieRepository.getAllMovies();
         assert !allMovies.isEmpty();
 
-        WatchlistRepository watchlistRepository = new WatchlistRepository();
+        WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();
         watchlistRepository.addMoviesToWatchlist(new WatchlistMovieEntity(allMovies.get(0)));
 
         assert !watchlistRepository.getAllWatchlistMovies().isEmpty();

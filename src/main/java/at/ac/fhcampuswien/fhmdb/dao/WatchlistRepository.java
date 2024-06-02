@@ -10,10 +10,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class WatchlistRepository {
+    private static WatchlistRepository instance;
     //fetch all Movie Entities
     private Dao<WatchlistMovieEntity, Long> watchlistDao;
+    public static synchronized WatchlistRepository getInstance() throws SQLException{
+        if (instance == null) {
+            instance = new WatchlistRepository();
+        }
+        return instance;
+    }
 
-    public WatchlistRepository() throws SQLException {
+    private WatchlistRepository() throws SQLException {
         this.watchlistDao = DatabaseManager.getDatabaseInstance().getWatchlistMovieDao();
     }
 

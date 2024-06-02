@@ -44,8 +44,8 @@ public class MovieStateManager {
             databaseInstance.createConnectionSource(USERNAME, PASSWORD);
             databaseInstance.createTables();
 
-            this.movieRepository = new MovieRepository();
-            this.watchlistRepository = new WatchlistRepository();
+            this.movieRepository = MovieRepository.getInstance();
+            this.watchlistRepository = WatchlistRepository.getInstance();
         } catch (SQLException | UnsupportedOperationException exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Failed to use local database!");

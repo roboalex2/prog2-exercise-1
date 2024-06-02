@@ -10,9 +10,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class MovieRepository {
+    private static MovieRepository instance;
     private Dao<MovieEntity, UUID> movieDao;
 
-    public MovieRepository() throws SQLException {
+    public static synchronized MovieRepository getInstance() throws SQLException{
+        if (instance == null) {
+            instance = new MovieRepository();
+        }
+        return instance;
+    }
+
+    private MovieRepository() throws SQLException {
         this.movieDao = DatabaseManager.getDatabaseInstance().getMovieRepositoryDao();
     }
 

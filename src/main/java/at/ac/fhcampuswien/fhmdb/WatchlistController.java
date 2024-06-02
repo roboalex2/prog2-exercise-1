@@ -21,9 +21,9 @@ import java.util.ResourceBundle;
 
 public class WatchlistController implements Initializable {
 
+
     @FXML
     private JFXListView<Movie> watchlistListView;
-
     private final ObservableList<Movie> observableWatchlistMovies = FXCollections.observableArrayList();
 
     @Override
