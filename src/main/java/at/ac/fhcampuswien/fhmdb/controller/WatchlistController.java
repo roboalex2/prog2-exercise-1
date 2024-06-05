@@ -34,6 +34,7 @@ public class WatchlistController implements Observer, Initializable {
     @Override
     public void update(String message) {
         System.out.println("Update received: " + message);
+        observableWatchlistMovies.clear();
         observableWatchlistMovies.setAll(MovieStateManager.getInstance().fetchWatchlistMovies());
         showAlert(message); // This line calls the showAlert method
     }
@@ -42,7 +43,10 @@ public class WatchlistController implements Observer, Initializable {
 
     private static WatchlistController instance;
 
-    private WatchlistController() {}
+    private WatchlistController() {
+        observableWatchlistMovies.clear();
+        observableWatchlistMovies.setAll(MovieStateManager.getInstance().fetchWatchlistMovies());
+    }
 
     @FXML
     private JFXListView<Movie> watchlistListView;
@@ -57,8 +61,8 @@ public class WatchlistController implements Observer, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableWatchlistMovies.clear();
-        observableWatchlistMovies.addAll(MovieStateManager.getInstance().fetchWatchlistMovies());
+        //observableWatchlistMovies.clear();
+        //observableWatchlistMovies.addAll(MovieStateManager.getInstance().fetchWatchlistMovies());
         watchlistListView.setItems(observableWatchlistMovies);
         watchlistListView.setCellFactory(watchlistListView -> new MovieCell("Remove", onRemoveFromWatchlistClicked));
 
