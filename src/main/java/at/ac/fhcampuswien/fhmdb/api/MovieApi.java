@@ -38,9 +38,9 @@ public class MovieApi {
 
         String url = new MovieAPIRequestBuilder(BASE_URL)
                 .query(movieRequestParameter.getQuery())
-                .genre(movieRequestParameter.getGenre() != null ? movieRequestParameter.getGenre().toString() : null)
-                .releaseYear(movieRequestParameter.getReleaseYear() != null ? movieRequestParameter.getReleaseYear().toString() : null)
-                .ratingFrom(movieRequestParameter.getRatingFrom() != null ? movieRequestParameter.getRatingFrom().toString() : null)
+                .genre(movieRequestParameter.getGenre())
+                .releaseYear(movieRequestParameter.getReleaseYear())
+                .ratingFrom(movieRequestParameter.getRatingFrom())
                 .build();
 
         Request request = new Request.Builder()

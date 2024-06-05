@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
+import at.ac.fhcampuswien.fhmdb.models.Genre;
 import okhttp3.HttpUrl;
 
 public class MovieAPIRequestBuilder {
@@ -16,23 +17,23 @@ public class MovieAPIRequestBuilder {
         return this;
     }
 
-    public MovieAPIRequestBuilder genre(String genre) {
-        if (genre != null && !genre.isEmpty()) {
-            urlBuilder.addQueryParameter("genre", genre);
+    public MovieAPIRequestBuilder genre(Genre genre) {
+        if (genre != null && !genre.toString().isEmpty()) {
+            urlBuilder.addQueryParameter("genre", genre.toString());
         }
         return this;
     }
 
-    public MovieAPIRequestBuilder releaseYear(String releaseYear) {
-        if (releaseYear != null && !releaseYear.isEmpty()) {
-            urlBuilder.addQueryParameter("releaseYear", releaseYear);
+    public MovieAPIRequestBuilder releaseYear(Integer releaseYear) {
+        if (releaseYear != null && !releaseYear.toString().isEmpty()) {
+            urlBuilder.addQueryParameter("releaseYear", releaseYear.toString());
         }
         return this;
     }
 
-    public MovieAPIRequestBuilder ratingFrom(String ratingFrom) {
-        if (ratingFrom != null && !ratingFrom.isEmpty()) {
-            urlBuilder.addQueryParameter("ratingFrom", ratingFrom);
+    public MovieAPIRequestBuilder ratingFrom(Double ratingFrom) {
+        if (ratingFrom != null && !ratingFrom.toString().isEmpty()) {
+            urlBuilder.addQueryParameter("ratingFrom", ratingFrom.toString());
         }
         return this;
     }
