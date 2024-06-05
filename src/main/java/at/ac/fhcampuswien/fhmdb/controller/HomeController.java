@@ -75,7 +75,8 @@ public class HomeController implements Initializable {
         watchlistButton.setOnAction(this::showWatchlist);
 
         unsortedMovies.addAll(MovieStateManager.getInstance().fetchAllMovies());
-        observableMovies.addAll(unsortedMovies);
+        observableMovies.setAll(sortState.sort(unsortedMovies));
+        sortBtn.setText(sortState.getButtonText());
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
