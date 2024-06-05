@@ -4,7 +4,8 @@ import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.manager.MovieStateManager;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.SortOrder;
+import at.ac.fhcampuswien.fhmdb.sort.NoSortState;
+import at.ac.fhcampuswien.fhmdb.sort.SortState;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.util.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.util.MovieUtils;
@@ -21,10 +22,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.IntStream;
 
 
@@ -56,6 +54,9 @@ public class HomeController implements Initializable {
     @FXML
     public TextField ratingField;
 
+    private SortState sortState = new NoSortState();
+
+    private List<Movie> unsortedMovies = new ArrayList<>();
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
     private HomeController() {}
@@ -70,9 +71,11 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableMovies.clear();
+        unsortedMovies.clear();
         watchlistButton.setOnAction(this::showWatchlist);
 
-        observableMovies.addAll(MovieStateManager.getInstance().fetchAllMovies());
+        unsortedMovies.addAll(MovieStateManager.getInstance().fetchAllMovies());
+        observableMovies.addAll(unsortedMovies);
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -111,15 +114,9 @@ public class HomeController implements Initializable {
     };
 
     private void onSortButtonClick(ActionEvent actionEvent) {
-        if ("Sort (desc)".equals(sortBtn.getText())) {
-            List<Movie> sortedMovies = MovieUtils.sort(observableMovies, SortOrder.DESCENDING);
-            observableMovies.setAll(sortedMovies);
-            sortBtn.setText("Sort (asc)");
-        } else {
-            List<Movie> sortedMovies = MovieUtils.sort(observableMovies, SortOrder.ASCENDING);
-            observableMovies.setAll(sortedMovies);
-            sortBtn.setText("Sort (desc)");
-        }
+        sortState.next(this);
+        sortBtn.setText(sortState.getButtonText());
+        observableMovies.setAll(sortState.sort(unsortedMovies));
     }
 
     public void onSearchButtonClick(ActionEvent actionEvent) {
@@ -149,13 +146,10 @@ public class HomeController implements Initializable {
             searchResult = MovieUtils.filterRating(searchResult, searchRating);
         }
 
-        if (sortBtn.getText() != null && sortBtn.getText().contains("des")) {
-            searchResult = MovieUtils.sort(searchResult, SortOrder.ASCENDING);
-        } else {
-            searchResult = MovieUtils.sort(searchResult, SortOrder.DESCENDING);
-        }
+        this.unsortedMovies = searchResult;
 
-        observableMovies.setAll(searchResult);
+        sortBtn.setText(sortState.getButtonText());
+        observableMovies.setAll(sortState.sort(unsortedMovies));
     }
 
     private Double getSearchRating() {
@@ -180,6 +174,10 @@ public class HomeController implements Initializable {
         }
 
         return Genre.valueOf(genreComboBox.getValue());
+    }
+
+    public void setSortState(SortState sortState) {
+        this.sortState = sortState;
     }
 
     private Integer getSearchReleaseDate() {
