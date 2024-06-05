@@ -95,19 +95,21 @@ public class MovieStateManager {
 
         try {
             WatchlistMovieEntity watchlistMovieEntity = watchlistRepository.fetchMovieEntity(movie.getId());
-            if (watchlistMovieEntity != null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Movie already added.");
-                alert.setContentText("The movie '" + movie.getTitle() + "' is already in the watchlist.");
-                alert.show();
-                return false;
-            }
+
 
             watchlistRepository.addMoviesToWatchlist(
                     new WatchlistMovieEntity(
                             MovieEntityMapper.fromMovies(List.of(movie)).get(0)
                     )
             );
+            if (watchlistMovieEntity != null) {
+                //Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                //alert.setTitle("Movie already added.");
+                //alert.setContentText("The movie '" + movie.getTitle() + "' is already in the watchlist.");
+                //alert.show();
+
+                return false;
+            }
             return true;
         } catch (DatabaseException exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
