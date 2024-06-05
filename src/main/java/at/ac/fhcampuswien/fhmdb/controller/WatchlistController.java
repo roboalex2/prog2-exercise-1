@@ -10,31 +10,29 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class WatchlistController implements IWatchlistController, Initializable {
+public class WatchlistController implements Initializable {
 
     private static WatchlistController instance;
+
+    private WatchlistController() {}
+
+    @FXML
+    private JFXListView<Movie> watchlistListView;
+    private final ObservableList<Movie> observableWatchlistMovies = FXCollections.observableArrayList();
+
     public static synchronized WatchlistController getInstance() {
         if (instance == null) {
             instance = new WatchlistController();
         }
         return instance;
     }
-    private WatchlistController() {}
-
-
-    @FXML
-    private JFXListView<Movie> watchlistListView;
-    private final ObservableList<Movie> observableWatchlistMovies = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
